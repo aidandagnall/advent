@@ -11,15 +11,12 @@ int main(int argc, char **argv)
     {
         sscanf(string, "%d", &fuelModule);
         fuelModule = fuelModule / 3 - 2;
-
-        fuelExtra = fuelModule;
+        fuelExtra = fuelModule / 3 - 2;
+        
         while (fuelExtra > 0)
         {
+            fuelModule += fuelExtra;
             fuelExtra = fuelExtra / 3 - 2;
-            if (fuelExtra > 0)
-            {
-                fuelModule += fuelExtra;
-            }
         }
         fuelTotal += fuelModule;
     }
