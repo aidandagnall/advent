@@ -3,40 +3,31 @@
 int main(int argc, char **argv)
 {
     int arr[6];
-    int val, adj, count = 0;
-    int invalid;
+    int count = 0;
+    
     for (int i = 124075; i < 580769; i++)
     {
-        val = i;
-        adj = 0;
-        invalid = 0;
+        int increasing = 1;
+        int adjacent = 0;
+        int val = i;
+
         for (int j = 5; j >=0; j--)
         {
             arr[j] = val % 10;
             val = val / 10;
         }
 
-        
         for(int j = 1; j < 6; j++)
         {
-            if (arr[j] == arr[j-1])
-            {
-                adj++;
-            }
+            if (arr[j] == arr[j - 1])
+                adjacent++;
 
             if (arr[j] < arr[j-1])
-            {
-                invalid = 1;
-                continue;
-            }
+                increasing = 0;
         }
-
-        if (adj == 0 || invalid == 1)
-        {
-            continue;
-        }
-
-        count++;
+        
+        if (increasing && adjacent)
+            count++;
     }
 
     printf("%d\n", count);
