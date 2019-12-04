@@ -23,7 +23,6 @@ int main(int argc, char **argv)
             {
                 wireA[i][0] = wireA[i - 1][0];
                 wireA[i][1] = wireA[i - 1][1] + 1;
-                wireA[i][2] = i;
                 i++;
             }
             
@@ -33,7 +32,6 @@ int main(int argc, char **argv)
             {
                 wireA[i][0] = wireA[i - 1][0];
                 wireA[i][1] = wireA[i - 1][1] - 1;
-                wireA[i][2] = i;
                 i++;
             }
             
@@ -43,7 +41,6 @@ int main(int argc, char **argv)
             {
                 wireA[i][1] = wireA[i - 1][1];
                 wireA[i][0] = wireA[i - 1][0] - 1;
-                wireA[i][2] = i;
                 i++;
             }
             break;
@@ -52,7 +49,6 @@ int main(int argc, char **argv)
             {
                 wireA[i][1] = wireA[i - 1][1];
                 wireA[i][0] = wireA[i - 1][0] + 1;
-                wireA[i][2] = i;
                 i++;
             }
             break;
@@ -76,7 +72,6 @@ int main(int argc, char **argv)
             {
                 wireB[i][0] = wireB[i - 1][0];
                 wireB[i][1] = wireB[i - 1][1] + 1;
-                wireB[i][2] = i;
                 i++;
             }
             
@@ -86,7 +81,6 @@ int main(int argc, char **argv)
             {
                 wireB[i][0] = wireB[i - 1][0];
                 wireB[i][1] = wireB[i - 1][1] - 1;
-                wireB[i][2] = i;
                 i++;
             }
             
@@ -96,7 +90,6 @@ int main(int argc, char **argv)
             {
                 wireB[i][1] = wireB[i - 1][1];
                 wireB[i][0] = wireB[i - 1][0] - 1;
-                wireB[i][2] = i;
                 i++;
             }
             break;
@@ -105,7 +98,6 @@ int main(int argc, char **argv)
             {
                 wireB[i][1] = wireB[i - 1][1];
                 wireB[i][0] = wireB[i - 1][0] + 1;
-                wireB[i][2] = i;
                 i++;
             }
             break;
@@ -134,7 +126,7 @@ int main(int argc, char **argv)
             {
                 collisions[collCount][0] = wireA[j][0];
                 collisions[collCount][1] = wireA[j][1];
-                collisions[collCount][2] = wireA[j][2] + wireB[k][2];
+                collisions[collCount][2] = j + k;
                 collCount++;
             }
         }
