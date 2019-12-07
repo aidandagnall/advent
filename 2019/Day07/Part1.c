@@ -7,7 +7,7 @@ void decodeInstruction(int, int [5]);
 
 int main(int argc, char **argv)
 {
-    int max = 0, values[5], output;
+    int max = 0, output;
 
     for (int a = 0; a < 5; a++)
     {
@@ -15,10 +15,12 @@ int main(int argc, char **argv)
         {
             if (a == b)
                 continue;
+            
             for (int c = 0; c < 5; c++)
             {
                 if (a == c || b == c)
                     continue;
+                
                 for (int d = 0; d < 5; d++)
                 {
                     if (a == d || b == d || c == d)
@@ -37,7 +39,7 @@ int main(int argc, char **argv)
 
                         if (output > max)
                             max = output;
-                    } 
+                    }
                 } 
             }
         }    
@@ -51,8 +53,8 @@ int intcode(int phase, int signal)
 {
     FILE *fp = fopen("input.txt", "r");
     char fullInput[3000], *token;
-    int intcode[250], ins[5];
-    int par1, par2, par3, opcode, position, input = phase;
+    int intcode[250], ins[5] = {0,0,0,0,0};
+    int par1, par2, par3, opcode, position = 0, input = phase;
 
     fgets(fullInput, sizeof(fullInput), fp);
     token = strtok(fullInput, ",");
