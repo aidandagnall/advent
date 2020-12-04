@@ -1,69 +1,40 @@
 import re
 def isValid(p):
-    fields = 0
-    for k in p:
-        if k == 'byr':
-            if int(p['byr']) < 1920 or int(p['byr']) > 2002:
-                return False
-            fields += 1
-        if k == 'iyr':
-            if int(p['iyr']) < 2010 or int(p['iyr']) > 2020:
-                return False
-            fields += 1
+    keys = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+    if not set(keys).issubset(set(p.keys())):
+        return False
 
-        if k == 'eyr':
-            if int(p['eyr']) < 2020 or int(p['eyr']) > 2030:
-                return False
-            fields += 1
-        if k == 'hgt':
-            if 'cm' in p['hgt']:
-                height = int(p['hgt'][0:-2])
-                if height < 150 or height > 193:
-                    return False
-            elif 'in' in p['hgt']:
-                height = int(p['hgt'][0:-2])
-                if height < 59 or height > 76:
-                    return False
-            else:
-                return False
-            fields += 1
-        if k == 'hcl':
-            if not re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', p['hcl']):
-                return False
-            fields += 1
-        if k == 'ecl':
-            colours = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
-            if p['ecl'] not in colours:
-                return False
-            fields += 1
-        if k == 'pid':
-            if len(p['pid']) != 9:
-                return False
-            fields += 1
-    if fields < 7:
+    if not int(p['byr']) in range(1920, 2003):
+        return False
+    if not int(p['iyr']) in range(2010, 2021):
+        return False
+    if not int(p['eyr']) in range(2020, 2031):
+        return False 
+    if not hgt(p['hgt']):
+        return False   
+    if not re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', p['hcl']):
+        return False
+    if p['ecl'] not in ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']:
+        return False  
+    if len(p['pid']) != 9:
         return False
     return True
-            
 
-f = open('input.txt', 'r')
+def hgt(h):
+    if 'cm' in h:
+        return int(h[:-2]) in range(150, 194)
+    elif 'in' in h:
+        return int(h[:-2]) in range(59, 77)
+
+rawinput = [i.strip() for i in open('input.txt', 'r')]
+input = [i.strip() for i in ' '.join(',' if not j else j for j in rawinput).split(',') if i]
+
 passports = []
-passport = {}
-for line in f:
-    if not line.strip():
-        passports.append(passport)
-        passport = {}
-        continue
-    k = line.strip().split(" ")
-    for j in k:
-        l = j.split(":")
-        passport[l[0]] = l[1]
-if passport != {}:
+for entry in input:
+    passport = {}
+    for field in entry.split(" "):
+        passport[field.split(':')[0]] = field.split(':')[1]
     passports.append(passport)
 
-fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
-valid = 0
-for p in passports:
-    if isValid(p):
-        valid += 1
-
-print(valid)
+validpassports = [p for p in passports if isValid(p)]
+print(len(validpassports))

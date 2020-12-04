@@ -1,22 +1,13 @@
-f = open('input.txt', 'r')
-passports = []
-passport = {}
-for line in f:
-    if not line.strip():
-        passports.append(passport)
-        passport = {}
-        continue
-    k = line.strip().split(" ")
-    for j in k:
-        l = j.split(":")
-        passport[l[0]] = l[1]
-if passport != {}:
-    passports.append(passport)
-valid = 0
-for p in passports:
-    if len(p) == 8:
-        valid += 1
-    elif len(p) == 7 and not 'cid' in p:
-        valid += 1
+input = [i.strip() for i in open('input.txt', 'r')]
+input = [i.strip() for i in ' '.join(',' if not j else j for j in input).split(',') if i]
 
-print(valid)
+passports = []
+for entry in input:
+    passport = {}
+    for field in entry.split(" "):
+        passport[field.split(':')[0]] = field.split(':')[1]
+    passports.append(passport)
+
+keys = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+validpassports = [p for p in passports if set(keys).issubset(set(p.keys()))]
+print(len(validpassports))
