@@ -20,4 +20,3 @@ for instruction, value in input:
         pos[0] += dirs[dir][0] * value
         pos[1] += dirs[dir][1] * value
 print(f'x={pos[0]} y={pos[1]} dist={abs(pos[0]) + abs(pos[1])} ')
-
