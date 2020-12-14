@@ -24,7 +24,6 @@ def runsimulation(arr):
             else: next[i].append(col)
     return next
 
-input = [[j for j in i.strip()] for i in open('input.txt')]
 neighbours = [[getadjacentcoords(input, j, i) for j in width] for i in height]
 current = []
 next = input

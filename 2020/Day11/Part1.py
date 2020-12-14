@@ -1,3 +1,5 @@
+input = [[j for j in i.strip()] for i in open('input.txt')]
+height, width = range(len(input)), range(len(input[0]))
 def getadjacentcoords(arr, x ,y):
     adjacent = []
     for i in range(y - 1, y + 2):
@@ -19,8 +21,7 @@ def runsimulation(arr):
             else: next[i].append(col)
     return next
 
-input = [[j for j in i.strip()] for i in open('input.txt')]
-neighbours = [[getadjacentcoords(input, j, i) for j in range(len(input[i]))] for i in range(len(input))]
+neighbours = [[getadjacentcoords(input, j, i) for j in width] for i in height]
 current = []
 next = input
 
