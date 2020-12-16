@@ -24,17 +24,15 @@ with open('input.txt', 'r') as f:
 # For each rule, find all columns that comply
 valid_cols = []
 for j, r in enumerate(rules):
-    valid_cols.append([])
-    for i in range(0, len(myticket)):
-        if all(t[i] in r for t in tickets):
-            valid_cols[j].append(i)
+    valid_cols.append([i for i in range(len(myticket)) if all(t[i] in r for t in tickets)])
 
 # Working from the rule with the fewest (1) valid columns, work backwards to
-# determine which column applies to which rule
+# determine which column applies to which rule. Work through sorted list, and 
+# change original list
 found = []
 for i, c in enumerate(sorted(valid_cols, key=len)):
-    orig_index = [i for i,d in enumerate(valid_cols) if c == d ][0]
-    valid_cols[orig_index] = list(filter(lambda v: v not in found, c))[0]
+    orig_index = valid_cols.index(c)
+    valid_cols[orig_index] = list(filter(lambda v: v not in found, c))
     found = c
 
 # Print the product of the values from own ticket in the columns found to be
