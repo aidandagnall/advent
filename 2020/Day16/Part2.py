@@ -1,11 +1,14 @@
 import re
+from math import prod
 
+# Used to filter invalid tickets from Part 1
 def is_ticket_valid(t):
     for v in t:
-        if not any(int(v) in rule for rule in rules):
+        if not any(v in rule for rule in rules):
             return False
     return True
 
+# Read input
 with open('input.txt', 'r') as f:
     rules = []
     for line in f:
@@ -14,24 +17,27 @@ with open('input.txt', 'r') as f:
         rulerange = list(range(matches[0], matches[1] + 1)) + list(range(matches[2], matches[3] + 1))
         rules.append(rulerange)
     f.readline()
-    myticket = re.findall('[0-9]+', f.readline().strip())
+    myticket = [int(x) for x in re.findall('[0-9]+', f.readline().strip())]
     f.readline()
     f.readline()
-    tickets = list(filter(is_ticket_valid, [re.findall('[0-9]+', line.strip()) for line in f]))
+    tickets = list(filter(is_ticket_valid , [[int(x) for x in re.findall('[0-9]+', line.strip())] for line in f]))
 
-valid_cols = {}
-
+# For each rule, find all columns that comply
+valid_cols = []
 for j, r in enumerate(rules):
-    valid_cols[j] = []
-    for i in range(3, len(myticket)):
+    valid_cols.append([])
+    for i in range(0, len(myticket)):
         if all(int(t[i]) in r for t in tickets):
             valid_cols[j].append(i)
-    print(f'j: {j} len: {len(valid_cols[j])} :  {valid_cols[j]}')
 
-# Worked this out by hand...
+# Working from the rule with the fewest (1) valid columns, work backwards to
+# determine which column applies to which rule
+found = []
+for i, c in enumerate(sorted(valid_cols, key=len)):
+    orig_index = [i for i,d in enumerate(valid_cols) if c == d ][0]
+    valid_cols[orig_index] = list(filter(lambda v: v not in found, c))[0]
+    found = c
 
-valid_departure_cols = [14, 3, 15, 17, 4, 12]
-prod = 1
-for v in valid_departure_cols:
-    prod *= int(myticket[v])
-print(prod)
+# Print the product of the values from own ticket in the columns found to be
+# for the departure info
+print(prod([ myticket[d] for d in valid_cols[0:6] ]))
