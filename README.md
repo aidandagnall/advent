@@ -32,6 +32,6 @@
 | 22   |         | :star2: |
 | 23   |         | :star2: |
 | 24   |         | :star2: |
-| 25   |         |         |
-| Total Stars | 19 | 48 |
+| 25   |         | :star2: |
+| Total Stars | 19 | 50 :tada: |
 | Language | C / C# | Python |
