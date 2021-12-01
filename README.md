@@ -8,7 +8,7 @@
 
 | Day  | 2019    | 2020    | 2021    |
 | ---- | ------- | ------- | ------- |
-| 1    | :star2: | :star2: |  |
+| 1    | :star2: | :star2: | [:star2:](2021/src/main/kotlin/days/Day1.kt) |
 | 2    | :star2: | :star2: |  |
 | 3    | :star2: | :star2: |  |
 | 4    | :star2: | :star2: |  |
