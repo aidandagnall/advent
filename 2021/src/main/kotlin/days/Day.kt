@@ -6,6 +6,7 @@ abstract class Day(private val day : Int) {
 
     protected val inputList: List<String> by lazy { InputReader.getInputAsList(day) }
     protected val inputIntList : List<Int> by lazy { inputList.map { it.toInt() }}
+    protected val inputSplitList : List<List<String>> by lazy { inputList.map { it.split(' ')}}
 
     fun solve() {
         println("Day $day:")
