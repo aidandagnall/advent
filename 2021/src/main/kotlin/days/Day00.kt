@@ -1,6 +1,6 @@
 package days
 
-class Day0 : Day(0) {
+class Day00 : Day(0) {
     override fun part1() : Any {
         return 0
     }

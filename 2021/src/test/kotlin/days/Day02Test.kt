@@ -3,17 +3,17 @@ package days
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class Day1Test {
-    private val day = Day1()
+class Day02Test {
+    private val day = Day02()
 
     @Test
     fun testPartOne() {
-        assertEquals(day.part1(), 7)
+        assertEquals(day.part1(), 150)
     }
 
 
     @Test
     fun testPartTwo() {
-        assertEquals(day.part2(), 5)
+        assertEquals(day.part2(), 900)
     }
 }

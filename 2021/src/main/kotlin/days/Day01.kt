@@ -1,6 +1,6 @@
 package days
 
-class Day1 : Day(1) {
+class Day01 : Day(1) {
     override fun part1() : Any {
         return inputIntList.filterIndexed { i, it -> i > 0 && it > inputIntList[i - 1] }.count()
     }

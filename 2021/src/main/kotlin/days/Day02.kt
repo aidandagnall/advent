@@ -1,6 +1,6 @@
 package days
 
-class Day2 : Day(2) {
+class Day02 : Day(2) {
     override fun part1() : Any {
         var horiz = 0
         var depth = 0
