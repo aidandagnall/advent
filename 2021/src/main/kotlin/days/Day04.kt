@@ -2,62 +2,37 @@ package days
 
 class Day04 : Day(4) {
     override fun part1() : Any {
-        val order = inputList.first().split(",").map { it.toInt() }
-        val cards = inputList.filterIndexed { i, it -> it != "" && i > 0 }
-            .map { it.split(" ")
-                .filter {i -> i != ""}
-                .map{ i -> i.toInt()}.toMutableList()
-            }
-            .chunked(5)
-
-        order.forEach { called ->
-            cards.onEach { card ->
-                card.map { row ->
-                    val i = row.indexOf(called)
-                    if ( i != -1 ) {
-                        row[i] = -1
-                    }
-                }
-
-                if (card.any { row -> row.all { it == -1} } or (0..4).any { i -> card.all { row -> row[i] == -1 } }) {
-                    return called * card.sumOf { r -> r.filter{ it != -1}.sumOf{it} }
-                }
-            }
-        }
-        return 0
+        return solveGames().sortedBy { it.second }
+            .map { it.first * it.third}
+            .first()
     }
 
     override fun part2() : Any {
+        return solveGames().sortedBy { it.second }
+            .map { it.first * it.third}
+            .last()
+    }
+
+    // Return list of solved games in the form
+    //      < Number called to win game, number of calls to win, sum of remaining card >
+    private fun solveGames() : List<Triple<Int, Int, Int>> {
         val order = inputList.first().split(",").map { it.toInt() }
         val cards = inputList.filterIndexed { i, it -> it != "" && i > 0 }
-            .map { it.split(" ")
-                .filter {i -> i != ""}
-                .map{ i -> i.toInt()}.toMutableList()
-            }
+            .map { it.split(" ").filter { i -> i != "" }.map { i -> i.toInt() } }
             .chunked(5)
-        var cardNumbers = (cards.indices).toList()
-
-        order.forEachIndexed { index, called ->
-            cards.onEach { card ->
-                card.forEach { row ->
-//                    row.map { if (it == called) -1 else it }
-                    val i = row.indexOf(called)
-                    if ( i != -1 ) {
-                        row[i] = -1
-                    }
-                }
-                println(card)
+            .map { it.flatten().toMutableList() }
+        return cards.map { card ->
+            order.forEachIndexed { i, called ->
+                card.replaceAll { if (it == called) -1 else it }
+                if (hasWon(card.toList())) return@map Triple(called, i, card.filter { it != -1 }.sum())
             }
-            cards.forEachIndexed { i, card ->
-                if (card.any { row -> row.all { it == -1} } or (0..4).any { i -> card.all { row -> row[i] == -1 } }) {
-                    if (cardNumbers.size == 1 && i in cardNumbers) {
-                        return called * card.sumOf { r -> r.filter{ it != -1}.sumOf{it}}
-                    }
-                    cardNumbers = cardNumbers.filter {it != i }
-                }
-            }
-
+            Triple(-1, -1, -1)
         }
-        return 0
+    }
+
+    private fun hasWon(card : List<Int>) : Boolean {
+        val gridCard = card.chunked(5)
+        return gridCard.any { row -> row.all { it == -1 } } or
+                (0..4).any { gridCard.all { row -> row[it] == -1 } }
     }
 }
