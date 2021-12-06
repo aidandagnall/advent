@@ -1,10 +1,6 @@
 package days
 
 import java.lang.Integer.max
-import java.lang.Integer.min
-import java.lang.Math.pow
-import kotlin.math.abs
-import kotlin.math.pow
 import kotlin.math.sign
 import java.lang.Math.abs as absKot
 
