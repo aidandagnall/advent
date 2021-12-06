@@ -15,7 +15,7 @@
 | 3    | [:star2:](2020/Day03) | [:star2:](2020/Day03) | [:star2:](2021/src/main/kotlin/days/Day03.kt) |
 | 4    | [:star2:](2020/Day04) | [:star2:](2020/Day04) | [:star2:](2021/src/main/kotlin/days/Day04.kt) |
 | 5    | [:star2:](2020/Day05) | [:star2:](2020/Day05) | [:star2:](2021/src/main/kotlin/days/Day05.kt) |
-| 6    | [:star2:](2020/Day06) | [:star2:](2020/Day06) |  |
+| 6    | [:star2:](2020/Day06) | [:star2:](2020/Day06) | [:star2:](2021/src/main/kotlin/days/Day06.kt) |
 | 7    | [:star2:](2020/Day07) | [:star2:](2020/Day07) |  |
 | 8    | [:star2:](2020/Day08) | [:star2:](2020/Day08) |  |
 | 9    | [:star2:](2020/Day09) | [:star2:](2020/Day09) |  |
