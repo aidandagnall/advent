@@ -4,3 +4,4 @@
 **/.gradle/*
 **/build/*
 *.exe
+**/.DS_Store
