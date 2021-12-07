@@ -1,7 +1,5 @@
 package days
 
-import java.math.BigInteger
-
 class Day06 : Day(6) {
     override fun part1() : Any {
         return runSimulation(80)
@@ -12,7 +10,7 @@ class Day06 : Day(6) {
     }
 
     private fun runSimulation(days : Int) : Long {
-        var input = inputList
+        val input = inputList
             .first()
             .split(',')
             .map {it.toInt()}
@@ -20,7 +18,7 @@ class Day06 : Day(6) {
 
         (1..days).forEach { _ ->
             val newFish = values[0]
-            values = values.mapIndexed { i, it ->
+            values = values.mapIndexed { i, _ ->
                 when(i) {
                     8 -> newFish
                     6 -> (values[7] + newFish)
