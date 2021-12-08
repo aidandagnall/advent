@@ -15,7 +15,7 @@ class Day08 : Day(8) {
     override fun part2() : Any {
         return inputList.sumOf { line ->
             val (signal, output) = line.split(" | ").map { it.split(" ") }
-            val wirings = signal.map { it.length to it.toCharArray().toSet() }.toMap()
+            val wirings = signal.associate { it.length to it.toCharArray().toSet() }
 
             // method from u/4HbQ, my original implementation was far less elegant
             // uses the triple (length, size of intersection with signal 4, size of intersection with signal 2) which
