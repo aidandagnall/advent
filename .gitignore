@@ -1,4 +1,6 @@
 *.txt
+!**/day00.txt
+!**/test/**/*.txt
 .vscode/
 **/.idea/*
 **/.gradle/*
