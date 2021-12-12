@@ -10,32 +10,26 @@ class Day12 : Day(12) {
         }
     }
 
-    private val routes = mutableSetOf<List<String>>()
-
     override fun part1(): Any {
-        explore(List(1) { "start" }, false)
-        return routes.size
+        return explore(listOf("start"), false).size
     }
 
     override fun part2(): Any {
-        explore(List(1) { "start" }, true)
-        return routes.size
+        return explore(listOf("start"), true).size
     }
 
-    private fun explore(currentPath: List<String>, canRevisitNode: Boolean) {
-        paths[currentPath.last()]!!.forEach { node ->
-            var newCanRevisitNode = canRevisitNode
-            if (node == "start") return@forEach
-            if (node == "end") {
-                routes.add(currentPath + node)
-                return@forEach
-            }
-            if (node[0].isLowerCase() && node in currentPath) {
-                if (!newCanRevisitNode) return@forEach
-                newCanRevisitNode = false
-            }
-            explore(currentPath + node, newCanRevisitNode)
+    private fun explore(
+        path: List<String>,
+        canRevisit: Boolean,
+        routes: MutableSet<List<String>> = mutableSetOf(),
+    ): MutableSet<List<String>> {
+        paths[path.last()]!!.forEach { node ->
+            if (node == "end") routes.add(path + node)
+            if (node == "start" || node == "end") return@forEach
+            if (node[0].isLowerCase() && node in path && !canRevisit) return@forEach
+            explore(path + node, canRevisit && !(node[0].isLowerCase() && node in path), routes)
         }
+        return routes
     }
 
 }
