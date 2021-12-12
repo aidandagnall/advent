@@ -1,8 +1,8 @@
 package days
 
 class Day11 : Day(11) {
-    val flashed = mutableSetOf<Pair<Int,Int>>()
-    override fun part1() : Any {
+    val flashed = mutableSetOf<Pair<Int, Int>>()
+    override fun part1(): Any {
         var input = inputList.map { it.chunked(1).map { i -> i.toInt() }.toMutableList() }
         return (1..100).sumOf { _ ->
             flashed.clear()
@@ -22,10 +22,11 @@ class Day11 : Day(11) {
         }
     }
 
-    override fun part2() : Any {
+    override fun part2(): Any {
         var input = inputList.map { it.chunked(1).map { i -> i.toInt() }.toMutableList() }
         var simultaneous = false
         var step = 0
+
         while (!simultaneous) {
             // increment
             step++
@@ -46,11 +47,11 @@ class Day11 : Day(11) {
         return step
     }
 
-    private fun List<MutableList<Int>>.flash(x : Int, y : Int) {
+    private fun List<MutableList<Int>>.flash(x: Int, y: Int) {
         if (this[x][y] <= 9 || (x to y) in flashed) return
         flashed.add(x to y)
         (x - 1..x + 1).forEach { i ->
-            (y - 1..y + 1).forEach inner@ { j ->
+            (y - 1..y + 1).forEach inner@{ j ->
                 if ((i to j) == (x to y)) return@inner
                 if (i in indices && j in get(0).indices) {
                     this[i][j] += 1
