@@ -16,9 +16,9 @@ class Day13Test {
     fun testPartTwo() {
         assertEquals("""
             █████
-            █    █ 
-            █    █ 
-            █    █ 
+            █   █
+            █   █
+            █   █
             █████
             """.trimIndent(), day.part2())
     }
