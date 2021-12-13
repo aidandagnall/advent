@@ -33,7 +33,7 @@ class Day13 : Day(13) {
     private fun List<Pair<Int,Int>>.plot() : String {
         return "\n" + (0..this.maxOf { it.second }).joinToString("\n") { y ->
             (0..this.maxOf { it.first }).map { x ->
-                if (x to y in this) '#'
+                if (x to y in this) '█'
                 else ' '
             }.joinToString("")
         }

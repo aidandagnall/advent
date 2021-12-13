@@ -15,11 +15,11 @@ class Day13Test {
     @Test
     fun testPartTwo() {
         assertEquals("""
-            #####
-            #   #
-            #   #
-            #   #
-            #####
+            █████
+            █    █ 
+            █    █ 
+            █    █ 
+            █████
             """.trimIndent(), day.part2())
     }
 }
