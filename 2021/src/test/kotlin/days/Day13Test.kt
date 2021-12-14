@@ -20,6 +20,6 @@ class Day13Test {
             █   █
             █   █
             █████
-            """.trimIndent(), day.part2())
+            """.trimIndent(), day.part2().toString().trimStart())
     }
 }
