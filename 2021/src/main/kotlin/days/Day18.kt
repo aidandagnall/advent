@@ -1,11 +1,9 @@
 package days
 
-import sun.security.jgss.GSSNameImpl
 import kotlin.math.ceil
 import kotlin.math.floor
 
 class Day18 : Day(18) {
-
     private val input : List<SnailNumber> = inputList.map { SnailNumber(it) }
 
     override fun part1() : Any {
