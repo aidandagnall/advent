@@ -10,7 +10,7 @@
 
 | Day         | 2019                  | 2020                  | 2021                                          | 2022                                          |
 | ----------- | --------------------- | --------------------- | --------------------------------------------- | --------------------------------------------- |
-| 1           | [:star2:](2020/Day01) | [:star2:](2020/Day01) | [:star2:](2021/src/main/kotlin/days/Day01.kt) | |
+| 1           | [:star2:](2020/Day01) | [:star2:](2020/Day01) | [:star2:](2021/src/main/kotlin/days/Day01.kt) | [:star2:](2022/src/main/kotlin/days/Day01.kt) |
 | 2           | [:star2:](2020/Day02) | [:star2:](2020/Day02) | [:star2:](2021/src/main/kotlin/days/Day02.kt) | |
 | 3           | [:star2:](2020/Day03) | [:star2:](2020/Day03) | [:star2:](2021/src/main/kotlin/days/Day03.kt) | |
 | 4           | [:star2:](2020/Day04) | [:star2:](2020/Day04) | [:star2:](2021/src/main/kotlin/days/Day04.kt) | |
