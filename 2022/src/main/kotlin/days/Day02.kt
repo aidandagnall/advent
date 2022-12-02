@@ -17,7 +17,10 @@ class Day02 : Day(2) {
         return input.sumOf { (a, b) -> 3 * b + getResult(a, b) + 1}
     }
 
+    // 0 for loss, 1 for draw, 2 for win
     private fun compareHands(a: Int, b: Int): Int = (4 + a - b) % 3
+
+    // 0 for rock, 1 for paper, 2 for scissors
     private fun getResult(shape: Int, result: Int): Int = when (result) {
             0 -> (3 + shape - 1) % 3
             1 -> (shape)
