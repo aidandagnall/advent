@@ -13,13 +13,13 @@ class Day04 : Day(4) {
 
     override fun part1() : Any {
         return input.count {(a, b) ->
-            a.all { it in b } || b.all { it in a }
+            (a.first in b && a.last in b) || (b.first in a && b.last in a)
         }
     }
 
     override fun part2() : Any {
         return input.count {(a, b) ->
-            a.any { it in b } || b.any { it in a }
+            (a.first in b || a.last in b) || (b.first in a || b.last in a)
         }
     }
 }
