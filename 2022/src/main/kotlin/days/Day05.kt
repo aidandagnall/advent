@@ -1,25 +1,15 @@
 package days
 
 class Day05 : Day(5) {
-
-    private val instructionRegex = Regex("""move (\d+) from (\d+) to (\d+)""")
     private val initialStack = inputList.take(inputList.indexOf("")).let { input ->
-        val state = input.dropLast(1)
-        val numStacks = input.last()
-            .split(" ")
-            .count { it != " " && it.isNotEmpty() }
-
-        List(numStacks) { stack ->
-            state.map { it.getOrElse(stack * 4 + 1) { ' ' } }.filter {it != ' '}
+        List(input.last().split(" ").count { it != " " && it.isNotEmpty() }) { stack ->
+            input.dropLast(1).map { it.getOrElse(stack * 4 + 1) { ' ' } }.filter {it != ' '}
         }
     }
 
-    private val instructions = inputList.drop(inputList.indexOf("") + 1).map {
-            instructionRegex.find(it)!!.let { matches ->
-                matches.groupValues.let {(_, a, b, c) ->
-                    Triple(a.toInt(), b.toInt(), c.toInt())
-                }
-            }
+    private val instructions = inputList.drop(inputList.indexOf("") + 1).map { line ->
+            Regex("""move (\d+) from (\d+) to (\d+)""").find(line)!!.groupValues
+                .drop(1).map(String::toInt)
         }
 
     override fun part1() : Any {
