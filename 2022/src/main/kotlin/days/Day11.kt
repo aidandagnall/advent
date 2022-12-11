@@ -1,49 +1,47 @@
 package days
 
+import util.product
+
 class Day11 : Day(11) {
 
-    private val lcm = getMonkeys().map { it.test }.fold(1L) { acc, i -> acc * i }
+    private val regex = """
+        Monkey (\d+):\s+
+        Starting items: (\d+(?:[ \t]*,[ \t]*\d+)*)\s+
+        Operation: new = old ([+*] \S+)\s+Test: divisible by (\d+)\s+
+        If true: throw to monkey (\d+)\s+
+        If false: throw to monkey (\d+)
+    """.trimIndent().replace("\n", "").toRegex()
+    private val lcm = getMonkeys().map { it.test }.fold(1) { acc, i -> acc * i }
 
     override fun part1() : Any = (0 until 20).fold(getMonkeys()) { acc, _ -> doRound(acc, true)}
-            .map { it.inspections }
-            .sorted()
-            .takeLast(2)
-            .let { (a, b) -> a * b }
+            .map { it.inspections }.sorted().takeLast(2).product()
 
     override fun part2() : Any = (0 until 10_000).fold(getMonkeys()){ acc, _ -> doRound(acc, false)}
-            .map { it.inspections }
-            .sorted()
-            .takeLast(2)
-            .let { (a, b) -> a * b }
+            .map { it.inspections }.sorted().takeLast(2).product()
 
     private fun getMonkeys(): List<Monkey> {
-        var mutableInput = inputList.toMutableList()
-        val monkeyList = mutableListOf<Monkey>()
-        while (mutableInput.size > 0) {
-            val monkeyInput = mutableInput.takeWhile { it != "" }
-            mutableInput = mutableInput.drop(monkeyInput.size + 1).toMutableList()
-
-            monkeyList.add( Monkey(
-                index = monkeyInput[0].trim().removePrefix("Monkey ").removeSuffix(":").toInt(),
-                items = monkeyInput[1].trim().removePrefix("Starting items: ").split(", ").map { it.toLong() }.toMutableList(),
-                operation = monkeyInput[2].trim().removePrefix("Operation: new = "),
-                test = monkeyInput[3].trim().removePrefix("Test: divisible by ").toInt(),
-                trueCase = monkeyInput[4].trim().removePrefix("If true: throw to monkey ").toInt(),
-                falseCase = monkeyInput[5].trim().removePrefix("If false: throw to monkey ").toInt(),
-            ))
+        return inputGroupedList.map { monkey ->
+            regex.matchEntire(monkey.joinToString(" "))!!.groupValues.let {
+                Monkey(
+                    it[1].toInt(),
+                    it[2].split(", ").map(String::toInt).toMutableList(),
+                    it[3],
+                    it[4].toInt(),
+                    it[5].toInt(),
+                    it[6].toInt(),
+                )
+            }
         }
-
-        return monkeyList.toList()
     }
 
     private fun doRound(monkeys: List<Monkey>, reduceWorry: Boolean): List<Monkey> {
         return monkeys.map { monkey ->
             (0 until monkey.items.size).forEach { _ ->
-                val worryValue = monkey.inspect().let {
+                val worryValue = (monkey.inspect().let {
                     if (reduceWorry) it / 3 else it
-                } % lcm
+                } % lcm).toInt()
 
-                val destination= if (worryValue % monkey.test == 0L) monkey.trueCase else monkey.falseCase
+                val destination = if (worryValue % monkey.test == 0) monkey.trueCase else monkey.falseCase
                 monkeys[destination].items.add(worryValue)
             }
             monkey
@@ -52,7 +50,7 @@ class Day11 : Day(11) {
 
     data class Monkey(
         val index: Int,
-        val items : MutableList<Long>,
+        val items : MutableList<Int>,
         val operation: String,
         val test: Int,
         val trueCase: Int,
@@ -60,26 +58,17 @@ class Day11 : Day(11) {
         var inspections: Long = 0L,
     ) {
         fun inspect(): Long {
-            val initial = items.removeFirst()
+            val initial = items.removeFirst().toLong()
             inspections++
-            val (a, op, b) = operation.split(" ")
-                .let { (a, b, c) ->
-                    Triple(
-                        if (a == "old") initial else a.toLong(),
-                        b,
-                        if (c == "old") initial else c.toLong(),
-                    )
-                }
-
-            return when (op) {
-                "+" -> a + b
-                "*" -> a * b
-                "-" -> a - b
-                "/" -> a / b
-                else -> a + b
+            val (op, value) = operation.split(" ").let { (a, b) ->
+                    a to if (b == "old") initial else b.toLong()
             }
 
+            return when (op) {
+                "+" -> initial + value
+                "*" -> initial * value
+                else -> initial + value
+            }
         }
     }
-
 }
