@@ -11,6 +11,16 @@ abstract class Day(private val day : Int) {
     protected val inputList: List<String> by lazy { InputReader.getInputAsList(day) }
     protected val inputIntList : List<Int> by lazy { inputList.map { it.toInt() }}
     protected val inputSplitList : List<List<String>> by lazy { inputList.map { it.split(' ')}}
+    protected val inputGroupedList: List<List<String>> by lazy {
+        var input = inputList
+        val output = mutableListOf<List<String>>()
+        while (input.isNotEmpty()) {
+            val group = input.takeWhile { it != "" }
+            output.add(group)
+            input = input.drop(group.size + 1)
+        }
+        output.toList()
+    }
 
     fun solve() {
         println("Day $day:")
