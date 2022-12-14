@@ -1,50 +1,39 @@
 package days
 
-import java.lang.Integer.min
+import util.plus
+import kotlin.math.min
 import kotlin.math.max
 
 class Day14 : Day(14) {
-    val rocks = mutableSetOf<Pair<Int,Int>>()
-    val sand = mutableSetOf<Pair<Int,Int>>()
-
-    init {
-        inputList.forEach { line ->
-            line.split(" -> ").map { it.split(",") }.map { (a, b) -> a.toInt() to b.toInt() }
-                .windowed(2).map { (start, end) ->
-                    (min(start.first, end.first)..max(start.first, end.first)).forEach { x ->
-                        (min(start.second, end.second)..max(start.second, end.second)).forEach { y ->
-                            rocks.add(x to y)
-                        }
+    private val rocks = inputList.flatMap { line ->
+        line.split(" -> ").map { it.split(",") }.map { (a, b) -> a.toInt() to b.toInt() }
+            .windowed(2).flatMap { (start, end) ->
+                (min(start.first, end.first)..max(start.first, end.first)).flatMap { x ->
+                    (min(start.second, end.second)..max(start.second, end.second)).map { y ->
+                        x to y
                     }
                 }
-        }
-    }
-
-    val max = rocks.maxOf { it.second } + 2
+            }
+    }.toMutableSet()
+    private val maxY : Int = rocks.maxOf { it.second }
+    private val sand = mutableSetOf<Pair<Int,Int>>()
 
     private fun addSand(includeFloor: Boolean) : Boolean {
-        var newSand = 500 to 0
-        var canMove = true
+        var new = 500 to 0
 
-        while (canMove) {
+        while (true) {
+            if (!includeFloor && new.second > maxY) return false
 
-            if (!includeFloor && rocks.all { newSand.second > it.second }) {
-                return false
-            }
-
-            if(newSand.first to (newSand.second + 1) !in rocks && newSand.first to (newSand.second + 1) !in sand) {
-                newSand = newSand.first to newSand.second + 1
-            } else if ((newSand.first - 1) to (newSand.second + 1) !in rocks && (newSand.first - 1) to (newSand.second + 1) !in sand) {
-                newSand = (newSand.first - 1) to newSand.second + 1
-            } else if ((newSand.first + 1) to (newSand.second + 1) !in rocks && (newSand.first + 1) to (newSand.second + 1) !in sand) {
-                newSand = (newSand.first + 1) to newSand.second + 1
-            } else {
-                canMove = false
+            new += when {
+                new + (0 to 1)  !in rocks && new + (0 to 1)  !in sand -> (0 to 1)
+                new + (-1 to 1) !in rocks && new + (-1 to 1) !in sand -> (-1 to 1)
+                new + (1 to 1)  !in rocks && new + (1 to 1)  !in sand -> (1 to 1)
+                else -> {
+                    sand.add(new)
+                    return true
+                }
             }
         }
-
-        sand.add(newSand)
-        return true
     }
 
     override fun part1() : Any {
@@ -53,27 +42,8 @@ class Day14 : Day(14) {
     }
 
     override fun part2() : Any {
-        (0..1000).map { rocks.add(it to max) }
-        while (500 to 0 !in sand) {
-            addSand(true)
-        }
-
-        val min = sand.minOf { it.first }
-        val maxX = sand.maxOf { it.first }
-
-        val output = (0..max).joinToString("\n") { y ->
-
-            (min..maxX).joinToString("") {  x ->
-                if (x to y in sand) {
-                    "o"
-                } else if (x to y in rocks) {
-                    "#"
-                } else " "
-            }
-        }
-
-        println(output)
-
+        (0..1000).forEach { rocks.add(it to maxY + 2) }
+        while (500 to 0 !in sand) addSand(true)
         return sand.count()
     }
 }
