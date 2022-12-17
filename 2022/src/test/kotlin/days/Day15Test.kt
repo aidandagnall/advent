@@ -8,12 +8,12 @@ class Day15Test {
 
     @Test
     fun testPartOne() {
-        assertEquals(day.part1(), 26)
+        assertEquals(day.getClearPositionsInRow(10), 26)
     }
 
 
     @Test
     fun testPartTwo() {
-        assertEquals(day.part2(), 0)
+        assertEquals(day.getMissingSensorFreq(20), 56_000_011L)
     }
 }
