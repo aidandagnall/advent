@@ -6,7 +6,7 @@
 
 :star2: Completed Parts 1 and 2
 
-(Click emojis to go to that day's solutions)
+(Click emojis to go to that days solutions)
 
 | Day         | 2019                  | 2020                  | 2021                                          | 2022                                          |
 | ----------- | --------------------- | --------------------- | --------------------------------------------- | --------------------------------------------- |
@@ -29,7 +29,7 @@
 | 17          |                       | [:star2:](2020/Day17) | [:star2:](2021/src/main/kotlin/days/Day17.kt) | [:star2:](2022/src/main/kotlin/days/Day17.kt) |
 | 18          |                       | [:star2:](2020/Day18) | [:star2:](2021/src/main/kotlin/days/Day18.kt) | [:star2:](2022/src/main/kotlin/days/Day18.kt) |
 | 19          |                       | [:star2:](2020/Day19) | [:star2:](2021/src/main/kotlin/days/Day19.kt) | [:star2:](2022/src/main/kotlin/days/Day19.kt) |
-| 20          |                       | [:star2:](2020/Day20) | [:star2:](2021/src/main/kotlin/days/Day20.kt) | |
+| 20          |                       | [:star2:](2020/Day20) | [:star2:](2021/src/main/kotlin/days/Day20.kt) | [:star2:](2022/src/main/kotlin/days/Day20.kt) |
 | 21          |                       | [:star2:](2020/Day21) | [:star2:](2021/src/main/kotlin/days/Day21.kt) | |
 | 22          |                       | [:star2:](2020/Day22) | [:star2:](2021/src/main/kotlin/days/Day22.kt) | |
 | 23          |                       | [:star2:](2020/Day23) | [:star2:](2021/src/main/kotlin/days/Day23.kt) | |
