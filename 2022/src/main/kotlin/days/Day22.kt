@@ -2,6 +2,9 @@ package days
 
 class Day22 : Day(22) {
 
+    enum class Direction { Right, Down, Left, Up }
+    private fun Direction.turnLeft() : Direction = Direction.values()[(4 + ordinal - 1) % 4]
+    private fun Direction.turnRight() : Direction = Direction.values()[(ordinal + 1) % 4]
     private val map = inputList.takeWhile { it != "" }.let { rows ->
         val width = rows.maxOf { it.length }
         rows.map { row ->
@@ -12,7 +15,7 @@ class Day22 : Day(22) {
     }
 
     // (row, column, facing)
-    private val start = Triple(0, map.first().indexOfFirst { it == '.' }, 0)
+    private val start = Triple(0, map.first().indexOfFirst { it == '.' }, Direction.Right)
     private val instructions = inputList.last().let { line ->
         var l = line
         val ins = mutableListOf<String>()
@@ -31,10 +34,10 @@ class Day22 : Day(22) {
     }
 
     private val facing = mapOf(
-        0 to (0 to 1),
-        1 to (1 to 0),
-        2 to (0 to -1),
-        3 to (-1 to 0),
+        Direction.Right to (0 to 1),
+        Direction.Down to (1 to 0),
+        Direction.Left to (0 to -1),
+        Direction.Up to (-1 to 0),
     )
 
     override fun part1(): Any {
@@ -42,21 +45,20 @@ class Day22 : Day(22) {
 
         instructions.forEach instruct@{ instruction ->
             when (instruction) {
-                "L" -> pos = Triple(pos.first, pos.second, (4 + pos.third - 1) % 4)
-                "R" -> pos = Triple(pos.first, pos.second, (pos.third + 1) % 4)
+                "L" -> pos = Triple(pos.first, pos.second, pos.third.turnLeft())
+                "R" -> pos = Triple(pos.first, pos.second, pos.third.turnRight())
                 else -> {
-                    val movement = instruction.toInt()
-                    (1..movement).forEach move@{ step ->
+                    repeat(instruction.toInt()) {
                         val dir = facing[pos.third]!!
                         var newX = pos.first + dir.first
                         var newY = pos.second + dir.second
 
                         if ((map.getOrNull(newX)?.getOrNull(newY) ?: ' ') == ' ') {
                             when (pos.third) {
-                                0 -> newY = map[newX].indexOfFirst { it != ' ' }
-                                1 -> newX = map.indexOfFirst { it[newY] != ' ' }
-                                2 -> newY = map[newX].indexOfLast { it != ' ' }
-                                3 -> newX = map.indexOfLast { it[newY] != ' ' }
+                                Direction.Right -> newY = map[newX].indexOfFirst { it != ' ' }
+                                Direction.Down -> newX = map.indexOfFirst { it[newY] != ' ' }
+                                Direction.Left -> newY = map[newX].indexOfLast { it != ' ' }
+                                Direction.Up  -> newX = map.indexOfLast { it[newY] != ' ' }
                             }
                         }
 
@@ -69,18 +71,16 @@ class Day22 : Day(22) {
                 }
             }
         }
-        return (pos.first + 1) * 1000 + (pos.second + 1) * 4 + pos.third
+        return (pos.first + 1) * 1000 + (pos.second + 1) * 4 + pos.third.ordinal
     }
 
     override fun part2(): Any {
         var pos = start
 
         instructions.forEach instruct@{ instruction ->
-            println(pos)
-            println("doing instruction $instruction")
             when (instruction) {
-                "L" -> pos = Triple(pos.first, pos.second, (4 + pos.third - 1) % 4)
-                "R" -> pos = Triple(pos.first, pos.second, (pos.third + 1) % 4)
+                "L" -> pos = Triple(pos.first, pos.second, pos.third.turnLeft())
+                "R" -> pos = Triple(pos.first, pos.second, pos.third.turnRight())
                 else -> {
                     val movement = instruction.toInt()
                     (1..movement).forEach move@{ _ ->
@@ -92,101 +92,54 @@ class Day22 : Day(22) {
                 }
             }
         }
-        return (pos.first + 1) * 1000 + (pos.second + 1) * 4 + pos.third
+        return (pos.first + 1) * 1000 + (pos.second + 1) * 4 + pos.third.ordinal
     }
 
-    private fun getRotatedCoordinates(pos: Triple<Int,Int,Int>): Triple<Int,Int,Int> {
+    private fun getRotatedCoordinates(pos: Triple<Int,Int,Direction>): Triple<Int,Int,Direction> {
         val dir = facing[pos.third]!!
-        var newX = pos.first + dir.first
-        var newY = pos.second + dir.second
-        var newDir = pos.third
-        when {
-            pos.third == 2 && newY == 49 && newX in 0 until 50 -> {
-                newX = 150 - (newX % 50) - 1
-                newY = 0
-                newDir = 0
-            }
+        val x = pos.first + dir.first
+        val y = pos.second + dir.second
+        return when {
+            //   AB
+            //   C
+            //  ED
+            //  F
 
-            pos.third == 3 && newX == -1 && newY in 50 until 100 -> {
-                newX = 150 + (newY % 50)
-                newY = 0
-                newDir = 0
-            }
+            // Left of A -> Left of E (going Right)
+            pos.third == Direction.Left && y == 49 && x in 0 until 50 -> Triple(150 - (x % 50) - 1, 0, Direction.Right)
+            // Up from A -> Left of F (going Right)
+            pos.third == Direction.Up && x == -1 && y in 50 until 100 -> Triple(150 + (y % 50), 0, Direction.Right)
 
+            // Right of B -> Right of D (going Left)
+            pos.third == Direction.Right && y == 150 -> Triple(150 - (x % 50) - 1, 99, Direction.Left)
+            // Down from B -> Right of C (going Left)
+            pos.third == Direction.Down && x == 50 && y in 100 until 150 -> Triple(50 + ( y % 50), 100 - 1, Direction.Left)
+            // Up from B -> Bottom of F (going Up)
+            pos.third == Direction.Up && x == -1 && y in 100 until 150 -> Triple(199, (y % 50), Direction.Up)
 
-            pos.third == 0 && newY == 150 -> {
-                newX = 150 - (newX % 50) - 1
-                newY = 99
-                newDir = 2
-            }
+            // Right of C -> Bottom of B (going Up)
+            pos.third == Direction.Right && y == 100 && x in 50 until 100 -> Triple(49, 100 + (x % 50), Direction.Up)
+            // Left of C -> Top of E (going Down)
+            pos.third == Direction.Left && y == 49 && x in 50 until 100 -> Triple(100, (x % 50), Direction.Down)
 
-            pos.third == 1 && newX == 50 && newY in 100 until 150 -> {
-                newX = 50 + ( newY % 50)
-                newY = 100 - 1
-                newDir = 2
-            }
+            // Right of D -> Right of B (going Left)
+            pos.third == Direction.Right && y == 100 && x in 100 until 150 -> Triple(50 - (x % 50) - 1, 149, Direction.Left)
+            // Down from D -> Right of F (going Left)
+            pos.third == Direction.Down && x == 150 && y in 50 until 100 -> Triple(150 + (y % 50), 49, Direction.Left)
 
-            pos.third == 3 && newX == -1 && newY in 100 until 150 -> {
-                newX = 199
-                newY = (newY % 50)
-                newDir = 3
-            }
+            // Left of E -> Left of A (going Right)
+            pos.third == Direction.Left && y == -1 && x in 100 until 150 -> Triple(50 - (x % 50) - 1, 50, Direction.Right)
+            // Up from E -> Left of C (going Right)
+            pos.third == Direction.Up && x == 99 && y in 0 until 50 -> Triple(50 + (y % 50), 50, Direction.Right)
 
-            pos.third == 0 && newY == 100 && newX in 50 until 100 -> {
-                newY = 100 + newX % 50
-                newX = 49
-                newDir = 3
-            }
+            // Right of F -> Bottom of D (going Up)
+            pos.third == Direction.Right && y == 50 && x in 150 until 200 -> Triple(149, 50 + (x % 50), Direction.Up)
+            // Down from F -> Top of B (going Down)
+            pos.third == Direction.Down && x == 200 -> Triple(0, 100 + (y % 50), Direction.Down)
+            // Left of F -> Top of A (going Down)
+            pos.third == Direction.Left && y == -1 && x in 150 until 200 -> Triple(0, 50 + (x % 50), Direction.Down)
 
-            pos.third == 2 && newY == 49 && newX in 50 until 100 -> {
-                newY = (newX % 50)
-                newX = 100
-                newDir = 1
-            }
-
-            pos.third == 0 && newY == 100 && newX in 100 until 150 -> {
-                newY = 149
-                newX = 50 - (newX % 50) - 1
-                newDir = 2
-            }
-
-            pos.third == 1 && newX == 150 && newY in 50 until 100 -> {
-                newX = 150 + (newY % 50)
-                newY = 49
-                newDir = 2
-            }
-
-            pos.third == 2 && newY == -1 && newX in 100 until 150 -> {
-                newX = 50 - (newX % 50) - 1
-                newY = 50
-                newDir = 0
-            }
-
-            pos.third == 3 && newX == 99 && newY in 0 until 50 -> {
-                newX = 50 + (newY % 50)
-                newY = 50
-                newDir = 0
-            }
-
-            pos.third == 0 && newY == 50 && newX in 150 until 200 -> {
-                newY = 50 + (newX % 50)
-                newX = 149
-                newDir = 3
-            }
-
-            pos.third == 1 && newX == 200 -> {
-                newY = 100 + (newY % 50)
-                newX = 0
-                newDir = 1
-            }
-
-            pos.third == 2 && newY == -1 && newX in 150 until 200 -> {
-                newY = 50 + (newX % 50)
-                newX = 0
-                newDir = 1
-            }
+            else -> Triple(x, y, pos.third)
         }
-
-        return Triple(newX, newY, newDir)
     }
 }
