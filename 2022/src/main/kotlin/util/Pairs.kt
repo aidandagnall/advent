@@ -9,3 +9,5 @@ operator fun Pair<Int,Int>.plus(other: Pair<Int,Int>): Pair<Int,Int> {
 fun Pair<Int,Int>.manhattan(other: Pair<Int,Int>): Int {
     return abs(this.first - other.first) + abs(this.second - other.second)
 }
+
+operator fun Pair<Int,Int>.times(scalar: Int) = first * scalar to second * scalar
