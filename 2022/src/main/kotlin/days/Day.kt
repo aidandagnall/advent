@@ -6,7 +6,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
-abstract class Day(private val day : Int) {
+abstract class Day(val day : Int) {
 
     protected val inputList: List<String> by lazy { InputReader.getInputAsList(day) }
     protected val inputIntList : List<Int> by lazy { inputList.map { it.toInt() }}
@@ -23,7 +23,6 @@ abstract class Day(private val day : Int) {
     }
 
     fun solve() {
-        println("Day $day:")
         println("\tPart 1: ${part1()}")
         println("\tPart 2: ${part2()}")
     }
@@ -33,7 +32,6 @@ abstract class Day(private val day : Int) {
         val (part1, timeP1) = measureTimedValue { part1() }
         val (part2, timeP2) = measureTimedValue { part2() }
 
-        println("Day $day:")
         println("\tPart 1: $part1 in ${timeP1.toString(DurationUnit.SECONDS, 4)}")
         println("\tPart 2: $part2 in ${timeP2.toString(DurationUnit.SECONDS, 4)}")
     }
