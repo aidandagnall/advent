@@ -63,7 +63,6 @@ class Day22 : Day(22) {
                         }
 
                         if (map[newX][newY] == '#') {
-                            println("  found wall, stopping '${map[newX][newY]}'")
                             return@instruct
                         }
                         pos = Triple(newX, newY, pos.third)
