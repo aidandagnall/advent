@@ -18,3 +18,4 @@ class Day01 : Day(1) {
         return elves.sorted().takeLast(3).sum()
     }
 }
+
