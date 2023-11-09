@@ -12,10 +12,7 @@ class Day06 : Day(6) {
 
     override fun part1() : Any {
         return coords.mapNotNull { coord ->
-            val dists = inputs.map { it to coord.manhattanDistanceTo(it) }
-            val lowest = dists.minBy { it.second }
-            if (dists.count { it.second == lowest.second} == 1) lowest.first
-            else null
+            inputs.minByWithDuplicates { coord.manhattanDistanceTo(it) }.let { if (it.size == 1) it[0] else null }
         }.groupingBy { it }.eachCount().maxOf { it.value }
     }
 
@@ -29,5 +26,9 @@ class Day06 : Day(6) {
         return (kotlin.math.abs(this.first - other.first) + kotlin.math.abs(this.second - other.second))
     }
 
-
+    private inline fun <T, R: Comparable<R>> Iterable<T>.minByWithDuplicates(transform: (T) -> R): List<T> {
+        val results = this.associateWith { transform(it) }
+        val min = results.minOf { it.value }
+        return results.filter { it.value == min }.keys.toList()
+    }
 }
