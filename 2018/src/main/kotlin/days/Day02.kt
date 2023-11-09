@@ -21,9 +21,7 @@ class Day02 : Day(2) {
 
     override fun part2() : Any {
         inputList.forEach { first ->
-            
             inputList.forEach { second ->
-                
                 var diff = 0
                 first.forEachIndexed { index, c ->
                     if (c != second[index]) diff++
