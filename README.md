@@ -36,5 +36,5 @@
 | 24          |                       | [:star2:](2020/Day24) | [:star2:](2021/src/main/kotlin/days/Day24.kt) | [:star2:](2022/src/main/kotlin/days/Day24.kt) | |
 | 25          |                       | [:star2:](2020/Day25) | [:star2:](2021/src/main/kotlin/days/Day25.kt) | [:star2:](2022/src/main/kotlin/days/Day25.kt) | |
 | Total Stars | 19                    | 50 :tada:             | 50 :tada:                                     | 50 :tada:                                     | |
-| Language    | C / C#                | Python                | Kotlin                                        | Kotlin                                        | ? |
+| Language    | C / C#                | Python                | Kotlin                                        | Kotlin                                        | Kotlin |
 
