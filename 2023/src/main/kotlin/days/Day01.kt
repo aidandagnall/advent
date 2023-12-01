@@ -8,7 +8,7 @@ class Day01 : Day(1) {
     }
 
     // this is without a doubt some of the worst code I have ever written
-    override fun part2() : Any =inputList.sumOf { line ->
+    override fun part2() : Any = inputList.sumOf { line ->
         line.replace("one", "one1one")
             .replace("two", "two2two")
             .replace("three", "three3three")
