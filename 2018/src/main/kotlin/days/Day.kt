@@ -30,9 +30,8 @@ abstract class Day(val day : Int) {
     @OptIn(ExperimentalTime::class)
     fun solveTimed() {
         val (part1, timeP1) = measureTimedValue { part1() }
-        val (part2, timeP2) = measureTimedValue { part2() }
-
         println("\tPart 1: $part1 in ${timeP1.toString(DurationUnit.SECONDS, 4)}")
+        val (part2, timeP2) = measureTimedValue { part2() }
         println("\tPart 2: $part2 in ${timeP2.toString(DurationUnit.SECONDS, 4)}")
     }
 
