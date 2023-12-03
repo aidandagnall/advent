@@ -2,12 +2,12 @@ package days
 
 class Day03 : Day(3) {
 
-    private val symbols = inputList.mapIndexed { y, it ->
+    private val symbols = inputList.flatMapIndexed { y, it ->
         it.mapIndexedNotNull { x, c ->
             if (!c.isDigit() && c != '.') (x to y) to c
             else null
         }
-    }.flatten().toMap()
+    }.toMap()
 
     private val numbers = inputList.flatMapIndexed { y, line ->
         "(\\d+)".toRegex().findAll(line).map { match ->
@@ -19,7 +19,6 @@ class Day03 : Day(3) {
         numbers
             .filter { (coords, _) -> coords.any { n -> n.neighbours().any { it in symbols } } }
             .sumOf { it.second }
-
 
     override fun part2() : Any =
         symbols.filter { (_, v) -> v == '*' }
