@@ -31,7 +31,6 @@ class Day05 : Day(5) {
         }
     }
 
-    // 388071289
     override fun part1() : Any {
         return seeds.minOf { num ->
             maps.fold(num) { acc, map ->
@@ -44,7 +43,6 @@ class Day05 : Day(5) {
         }
     }
 
-    // 84206669
     override fun part2() : Any {
         return 0
         val maps = maps.map { it.map { (dest, src, len) -> dest..< dest + len to src} }
