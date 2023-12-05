@@ -1,66 +1,50 @@
 package days
 
-import kotlin.math.min
-
 class Day05 : Day(5) {
-    data class Mapper(val dest: Long, val src: Long, val size: Long) {
-        val srcRange: LongRange
-            get() = src..<src + size
+    data class Layer(val mappers: List<Mapper>) {
+        fun map(input: Long): Long = mappers.find { input in it }?.map(input) ?: input
+        fun subRanges(start: Long, size: Long): List<Pair<Long, Long>> {
+            val breakpoints = mappers.flatMap { listOf(it.srcRange.first, it.srcRange.last) } + listOf(start, start + size)
 
-        val destRange: LongRange
-            get() = dest ..< dest + size
-
-        fun map(input: Long): Long = if (input in srcRange) input - src + dest else input
-
-        fun subRanges(start: Long, end: Long): List<LongRange> {
-            if (start > src + size || end < src) return emptyList()
-
-            if (start < src && src + size < end) return listOf(start..< src, destRange, src + size ..< end)
-
-            else return emptyList()
-//            if ()
+            return breakpoints.asSequence().sorted()
+                .dropWhile { it < start }.takeWhile { it <= start + size}
+                .windowed(2)
+                .map { (first, last) ->
+                    mappers.find { first in it }?.let { it.map(first) to (last - first) } ?: (first to (last - first))
+                }.toList()
         }
+    }
+    data class Mapper(val dest: Long, val src: Long, val size: Long) {
+        val srcRange: LongRange = src ..< src + size
+        fun map(input: Long): Long = input - src + dest
+        operator fun contains(other: Long): Boolean = other in srcRange
     }
 
     private val seeds = inputList.first().removePrefix("seeds: ").split(" ").map { it.toLong() }
-    private val maps = inputGroupedList.drop(1).map { group ->
-        group.drop(1).map {
-            it.split(" ").let { (dest, src, len) ->
-                Mapper(dest.toLong(), src.toLong(), len.toLong())
+    private val seedRanges = inputList.first().removePrefix("seeds: ").split(" ").chunked(2)
+        .map { (a, b) -> a.toLong()to b.toLong() }
+    private val layers = inputGroupedList.drop(1).map { group ->
+        Layer(
+            group.drop(1).map {
+                it.split(" ").let { (dest, src, len) ->
+                    Mapper(dest.toLong(), src.toLong(), len.toLong())
+                }
             }
-        }
+        )
     }
 
-    override fun part1() : Any {
-        return seeds.minOf { num ->
-            maps.fold(num) { acc, map ->
-                map.firstOrNull { (_, src, len) ->
-                    acc in (src..<src + len)
-                }?.let { (dest, src, _) ->
-                    acc + (dest - src)
-                } ?: acc
+    override fun part1() : Any = seeds.minOf { num ->
+            layers.fold(num) { acc, layer ->
+                layer.map(acc)
             }
         }
-    }
 
-    override fun part2() : Any {
-        return 0
-        val maps = maps.map { it.map { (dest, src, len) -> dest..< dest + len to src} }
-
-        val seedRanges = inputList.first().removePrefix("seeds: ").split(" ")
-            .chunked(2)
-            .map { (a, b) -> a.toLong() ..< a.toLong() + b.toLong() }
-
-        return (0..maps.last().maxOf { it.first.last }).first { num ->
-            maps.reversed().fold(num) { acc, map ->
-                map.firstOrNull { (range, src) ->
-                    acc in range
-                }?.let { (dest, src) ->
-                    acc - dest.first + src
-                } ?: acc
-            }.let { seed ->
-                seedRanges.any { seed in it }
-            }
+    override fun part2() : Any = seedRanges.minOf {
+            layers.fold(listOf(it)) { acc, layer ->
+                acc.flatMap { (start, size) ->
+                    layer.subRanges(start, size)
+                }
+            }.minOf { it.first }
         }
-    }
 }
+
