@@ -14,7 +14,7 @@
 | 2           | [:star2:](2019/Day02) | [:star2:](2020/Day02) | [:star2:](2021/src/main/kotlin/days/Day02.kt) | [:star2:](2022/src/main/kotlin/days/Day02.kt) | [:star2:](2023/src/main/kotlin/days/Day02.kt) |
 | 3           | [:star2:](2019/Day03) | [:star2:](2020/Day03) | [:star2:](2021/src/main/kotlin/days/Day03.kt) | [:star2:](2022/src/main/kotlin/days/Day03.kt) | [:star2:](2023/src/main/kotlin/days/Day03.kt) |
 | 4           | [:star2:](2019/Day04) | [:star2:](2020/Day04) | [:star2:](2021/src/main/kotlin/days/Day04.kt) | [:star2:](2022/src/main/kotlin/days/Day04.kt) | [:star2:](2023/src/main/kotlin/days/Day04.kt) |
-| 5           | [:star2:](2019/Day05) | [:star2:](2020/Day05) | [:star2:](2021/src/main/kotlin/days/Day05.kt) | [:star2:](2022/src/main/kotlin/days/Day05.kt) | |
+| 5           | [:star2:](2019/Day05) | [:star2:](2020/Day05) | [:star2:](2021/src/main/kotlin/days/Day05.kt) | [:star2:](2022/src/main/kotlin/days/Day05.kt) | [:star2:](2023/src/main/kotlin/days/Day05.kt) |
 | 6           | [:star2:](2019/Day06) | [:star2:](2020/Day06) | [:star2:](2021/src/main/kotlin/days/Day06.kt) | [:star2:](2022/src/main/kotlin/days/Day06.kt) | |
 | 7           | [:star2:](2019/Day07) | [:star2:](2020/Day07) | [:star2:](2021/src/main/kotlin/days/Day07.kt) | [:star2:](2022/src/main/kotlin/days/Day07.kt) | |
 | 8           | [:star2:](2019/Day08) | [:star2:](2020/Day08) | [:star2:](2021/src/main/kotlin/days/Day08.kt) | [:star2:](2022/src/main/kotlin/days/Day08.kt) | |
