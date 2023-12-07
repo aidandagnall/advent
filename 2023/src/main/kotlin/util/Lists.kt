@@ -14,3 +14,5 @@ fun List<Int>.product(): Int {
 fun List<Long>.product(): Long {
     return this.fold(1L) {acc, i -> acc * i}
 }
+
+fun <T> List<T>.replace(old: T, new: T): List<T> = map { if (it == old) new else it }
