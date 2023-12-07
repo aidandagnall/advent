@@ -21,10 +21,7 @@ class Day07 : Day(7) {
         private fun handType(): String = cards.groupingBy { it }.eachCount()
             .map { (char, count) -> if (char == '*') 0 else count }
             .sortedDescending()
-            .let { listOf(it.first() + cards.count { it == '*' }) + it.drop(1)  }
-            .joinToString("")
-            .take(2)
-            .padEnd(2, '0')
+            .let { "${it.first() + cards.count { it == '*' }}${it.getOrNull(1) ?: 0}"  }
     }
 
     private val hands = inputList.map {
