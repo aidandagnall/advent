@@ -18,5 +18,7 @@ class Day08 : Day(8) {
     }.first { (node, _) -> node.endsWith(endPattern) }.second
 
     override fun part1() : Any = solve("AAA", "ZZZ")
-    override fun part2() : Any = map.keys.filter { it.last() == 'A' }.map { solve(it, "Z") }.fold(1L) { acc, i -> acc.lcm(i.toLong()) }
+    override fun part2() : Any = map.keys.filter { it.last() == 'A' }
+        .map { solve(it, "Z") }
+        .fold(1L) { acc, i -> acc.lcm(i.toLong()) }
 }
