@@ -3,35 +3,20 @@ package days
 import util.lcm
 
 class Day08 : Day(8) {
-
     private val directions = inputList.first()
     private val map = inputList.drop(2).associate {
-        """([\dA-Z]{3}) = \(([\dA-Z]{3}), ([\dA-Z]{3})\)""".toRegex().matchEntire(it)!!.groupValues.let { (_, a, b, c) ->
-            a to (b to c)
-        }
-    }
-    override fun part1() : Any {
-        var current = "AAA"
-        var index = 0
-        while(current != "ZZZ") {
-            val dir = directions[index % directions.length]
-            current = map[current]!!.let { if (dir == 'L') it.first else it.second }
-            index += 1
-        }
-        return index
+        """([\dA-Z]{3}) = \(([\dA-Z]{3}), ([\dA-Z]{3})\)""".toRegex()
+            .matchEntire(it)!!.groupValues.let { (_, a, b, c) ->
+                a to (b to c)
+            }
     }
 
-    override fun part2() : Any {
-        return map.filterKeys { it.last() == 'A' }.map {
-            var current = it.key
-            var index = 0
-            while(current.last() != 'Z') {
-                current = if (directions[index % directions.length] == 'L') map[current]!!.first else map[current]!!.second
-                index += 1
-            }
-            index
-        }.fold(1L) { acc, i ->
-            acc.lcm(i.toLong())
-        }
-    }
+    private fun solve(start: String, endPattern: String): Int = generateSequence(start to 0) { (current, index) ->
+        (map[current]?.let {  (left, right) ->
+            if (directions[index % directions.length] == 'L') left else right
+        } ?: endPattern) to index + 1
+    }.first { (node, _) -> node.endsWith(endPattern) }.second
+
+    override fun part1() : Any = solve("AAA", "ZZZ")
+    override fun part2() : Any = map.keys.filter { it.last() == 'A' }.map { solve(it, "Z") }.fold(1L) { acc, i -> acc.lcm(i.toLong()) }
 }
