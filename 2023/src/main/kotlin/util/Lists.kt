@@ -1,9 +1,9 @@
 package util
 
-inline fun <reified T> transpose(xs: List<List<T>>): List<List<T>> {
-    return List(xs[0].size) { j ->
-        List(xs.size) { i ->
-            xs[i][j]
+inline fun <reified T> List<List<T>>.transpose(): List<List<T>> {
+    return List(this[0].size) { j ->
+        List(this.size) { i ->
+            this[i][j]
         }
     }
 }

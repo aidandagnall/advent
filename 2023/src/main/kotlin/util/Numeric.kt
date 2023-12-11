@@ -21,3 +21,7 @@ fun Long.gcd(b:Long): Long{
     }
     return left
 }
+
+fun Int.safeRangeTo(other: Int): IntRange =
+    if (this <= other) this..other
+    else other..this
