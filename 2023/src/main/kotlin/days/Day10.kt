@@ -39,11 +39,54 @@ class Day10 : Day(10) {
         }
     }
 
+    override fun part2(): Any {
+        val path = bfs().let { connections ->
+            connections.filterKeys { it == start }.toList().first().let { coord ->
+                generateSequence(coord.first) {
+                    connections[it]
+                } + coord.first
+            }.windowed(2).toList()
+        }
+
+        return listOf(
+            (start.first + 0.5).toFloat() to (start.second + 0.5).toFloat(),
+            (start.first - 0.5).toFloat() to (start.second - 0.5).toFloat(),
+        ).maxOf {
+            fill(it, path.associate { (a, b) -> a to b })
+        }
+    }
+
+    private val minX = coords.keys.minOf { it.first }
+    private val maxX = coords.keys.maxOf { it.first }
+    private val minY = coords.keys.minOf { it.second }
+    private val maxY = coords.keys.maxOf { it.second }
+
+    private fun bfs(): Map<Pair<Int, Int>, Pair<Int, Int>> {
+        val (first, end) = getNext(start)
+        val queue = mutableListOf(first)
+        val explored = mutableSetOf(start, first)
+        val children = mutableMapOf(start to first)
+
+        while (queue.isNotEmpty()) {
+            val v = queue.removeFirst()
+            if (v == end) {
+                return children.toMap()
+            }
+            getNext(v).forEach {
+                if (it !in explored) {
+                    explored.add(it)
+                    children[v] = it
+                    queue.add(it)
+                }
+            }
+        }
+        return children
+    }
+
     private fun fill(start: Pair<Float,Float>, path: Map<Pair<Int,Int>,Pair<Int,Int>>): Int {
         val done = mutableSetOf(start)
         val queue = mutableListOf(start)
         val counts = mutableSetOf<Pair<Int,Int>>()
-        println("path -> $path")
 
         while (queue.isNotEmpty()) {
             val v = queue.removeFirst()
@@ -60,8 +103,6 @@ class Day10 : Day(10) {
                 if (n in done) {
                     return@forEachIndexed
                 }
-
-                println(n)
 
                 val (a,b) = when(i) {
                     0 -> listOf(
@@ -86,9 +127,6 @@ class Day10 : Day(10) {
 
                 }
 
-                // check to see if path between the v and n exists in path
-                //   if it does, ignore
-                //   if it does not, fill and add
                 if (path[a] != b && path[b] != a) {
                     done.add(n)
                     queue.add(n)
@@ -106,52 +144,5 @@ class Day10 : Day(10) {
         return counts.count()
     }
 
-    val minX = coords.keys.minOf { it.first }
-    val maxX = coords.keys.maxOf { it.first }
-    val minY = coords.keys.minOf { it.second }
-    val maxY = coords.keys.maxOf { it.second }
 
-    fun bfs(): Map<Pair<Int, Int>, Pair<Int, Int>> {
-        val (first, end) = getNext(start)
-        val queue = mutableListOf(first)
-        val explored = mutableSetOf(start, first)
-        val children = mutableMapOf(start to first)
-
-        while (queue.isNotEmpty()) {
-            val v = queue.removeFirst()
-            if (v == end) {
-                return children
-            }
-            getNext(v).forEach {
-                if (it !in explored) {
-                    explored.add(it)
-                    children[v] = it
-                    queue.add(it)
-                }
-            }
-        }
-
-        return children
-    }
-
-    override fun part2(): Any {
-        val path = bfs().let { connections ->
-            connections.filterKeys { it == start }.toList().first().let { coord ->
-                generateSequence(coord.first) {
-                    connections[it]
-                }
-            }.windowed(2)
-        }
-
-        val fullPath: MutableList<List<Pair<Int,Int>>> = path.toMutableList()
-        fullPath.add(listOf<Pair<Int,Int>>(path.last().let { it.last() }, start))
-
-        val finalPath = fullPath.toList()
-        return listOf(
-            (start.first + 0.5).toFloat() to (start.second + 0.5).toFloat(),
-            (start.first - 0.5).toFloat() to (start.second - 0.5).toFloat(),
-        ).maxOf {
-            fill(it, finalPath.associate { (a, b) -> a to b })
-        }
-    }
 }
