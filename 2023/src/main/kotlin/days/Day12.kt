@@ -13,14 +13,14 @@ class Day12 : Day(12) {
     override fun part1() : Any {
         return records.sumOf { (gears, groups) ->
             cache.clear()
-            println("$gears -> $groups")
+//            println("$gears -> $groups")
             find(gears, groups, gears.count { it == '?' }).also { println(cache) }.also { println(" RESULT: $gears -> $it") }
         }
     }
 
-    val cache = mutableMapOf<Pair<List<String>,List<Int>>, Int>()
+    val cache = mutableMapOf<Pair<List<String>,List<Int>>, Long>()
 
-    private fun find(gears: String, groups: List<Int>, count: Int): Int {
+    private fun find(gears: String, groups: List<Int>, count: Int): Long{
         if (count == 0) {
             if (!gears.satisfies(groups)) {
                 return 0
@@ -28,6 +28,8 @@ class Day12 : Day(12) {
 //            println("  $gears satisfies $groups")
             return 1
         }
+
+//        println("HERE")
 
         val firstQ = gears.indexOfFirst { it == '?' }
 
@@ -38,12 +40,30 @@ class Day12 : Day(12) {
             if (it.index >= gearGroups.size) false
             else gearGroups[it.index].count { it == '#' } == it.value && '?' !in gearGroups[it.index]
         }.map { it.value }
+
+        val doneGroups = groups.dropLast(groupsRemaining.count())
+        val doneGears = gearGroups.dropLast(gearsRemaining.count())
+
+//        println("""
+//            -------------------
+//              $gears -> $groups
+//            DONE:
+//              $doneGears -> $doneGroups
+//            TO DO:
+//              $gearsRemaining -> $groupsRemaining
+//        """.trimIndent())
+
+
+        if (doneGears.size != doneGroups.size || !doneGroups.zip(doneGears).all { (a, b) -> a == b.count { it == '#' } }) {
+            return 0
+        }
+
 //            gears.split(".").filter { it.isNotEmpty() }
 //            .zip(groups).dropWhile { (a, b) ->
 //                a.count { it == '#' } == b && '?' !in a
 //            }.map { it.second }
         if (gearsRemaining.isNotEmpty() && groupsRemaining.isNotEmpty()) {
-            if (gearsRemaining.first().count { it == '#' } > groupsRemaining.first()) {
+            if (gearsRemaining.first().count { it == '#' } > groupsRemaining.first() && '?' !in gearsRemaining.first()) {
                 return 0
             }
         }
@@ -58,11 +78,15 @@ class Day12 : Day(12) {
 //        }
 
 
-        println("""
-            -------------------
-            $gears -> $groups
-            $gearsRemaining -> $groupsRemaining
-        """.trimIndent())
+
+//        println("""
+//            -------------------
+//              $gears -> $groups
+//            DONE:
+//              $doneGears -> $doneGroups
+//            TO DO:
+//              $gearsRemaining -> $groupsRemaining
+//        """.trimIndent())
         if(gearsRemaining to groupsRemaining in cache) {
             return cache[gearsRemaining to groupsRemaining]!!
         }
@@ -86,7 +110,6 @@ class Day12 : Day(12) {
                 a.count { it == '#' } == b
             }
 
-//        println("    $gearGroups -> $groups = $t")
         return t
     }
 
@@ -95,8 +118,7 @@ class Day12 : Day(12) {
             println("$i / ${records.count()}")
             val newGears = (1..5).joinToString("?") { gears }
             val newGroups = (1..5).flatMap { groups }
-            println("$newGears, $newGroups")
             find(newGears, newGroups, newGears.count { it == '?' })
-        }.sum().also { println(cache) }
+        }.sum()
     }
 }
