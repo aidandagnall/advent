@@ -16,3 +16,9 @@ fun List<Long>.product(): Long {
 }
 
 fun <T> List<T>.replace(old: T, new: T): List<T> = map { if (it == old) new else it }
+
+fun <T> List<T>.repeat(n: Int): List<T> = (1..< n).fold(this) { acc, _ ->
+    acc + this
+}
+
+fun List<String>.filterNotEmpty(): List<String> = this.filter { it.isNotEmpty() }
