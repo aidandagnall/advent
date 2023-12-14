@@ -34,15 +34,13 @@ class Day13 : Day(13) {
     }
 
     private fun findRows(block: List<String>, ignore: Int? = null): Int =
-        block.mapIndexed { i, it -> i to it }
+        block.asSequence().withIndex()
             .windowed(2)
-            .filter { (a, b) -> (a.second.compareTo(b.second) == 0) }
-            .filter { it.first().first + 1 != ignore }
+            .filter { (a, b) -> a.value == b.value }
+            .filter { (a, _) -> a.index + 1 != ignore }
             .firstOrNull { (a, _) ->
-                block.take(a.first + 1).reversed().zip(block.drop(a.first + 1)).all { (a, b) ->
+                block.take(a.index + 1).reversed().zip(block.drop(a.index + 1)).all { (a, b) ->
                     a == b
                 }
-            }?.first()?.first?.let {
-                it + 1
-            } ?: 0
+            }?.let { (a, _) -> a.index + 1} ?: 0
 }
