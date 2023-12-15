@@ -17,6 +17,8 @@ fun List<Long>.product(): Long {
 
 fun <T> List<T>.replace(old: T, new: T): List<T> = map { if (it == old) new else it }
 
+fun <T> List<T>.replaceAt(index: Int, new: T): List<T> = take(index) + listOf(new) + drop(index + 1)
+
 fun <T> List<T>.repeat(n: Int): List<T> = (1..< n).fold(this) { acc, _ ->
     acc + this
 }
