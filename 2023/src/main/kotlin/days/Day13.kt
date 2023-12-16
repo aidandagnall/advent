@@ -4,10 +4,7 @@ import util.transpose
 
 class Day13 : Day(13) {
 
-    private val patterns = inputGroupedList.map { block ->
-        block
-    }
-
+    private val patterns = inputGroupedList
 
     private fun findCols(block: List<String>, ignore: Int? = null): Int = block.map {
             it.toList()
