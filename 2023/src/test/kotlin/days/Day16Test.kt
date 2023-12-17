@@ -14,6 +14,6 @@ class Day16Test {
 
     @Test
     fun testPartTwo() {
-        assertEquals(0, day.part2())
+        assertEquals(51, day.part2())
     }
 }
