@@ -1,38 +1,31 @@
 package days
 
 import util.lcm
-import util.plus
 
 class Day20 : Day(20) {
     enum class Pulse { HIGH, LOW }
+
     sealed interface Module {
         val name: String
         val destinations: List<String>
-        fun process(input: Message): Pulse?;
-        fun copy(): Module;
+        fun process(input: Message): Pulse?
+        fun copy(): Module
     }
+
     data class FlipFlop(
         override val name: String,
         override val destinations: List<String>,
         val initialState: Boolean = false,
     ): Module {
         private var on: Boolean = initialState
-        override fun process(input: Message): Pulse? {
-            return when (input.value) {
+        override fun process(input: Message): Pulse? =
+            when (input.value) {
                 Pulse.LOW -> {
                     on = !on
                     if (on) Pulse.HIGH else Pulse.LOW
                 }
                 else -> null
             }
-//            if (input.value == Pulse.)
-//            return if (inputs.any { it.value == Pulse.LOW } && inputs.isNotEmpty()) {
-//                on = !on
-//                if (on) Pulse.HIGH else Pulse.LOW
-//            } else {
-//                null
-//            }
-        }
         override fun copy(): FlipFlop = FlipFlop(name, destinations.toList(), on)
     }
 
@@ -42,20 +35,15 @@ class Day20 : Day(20) {
         val initialMemory: Map<String,Pulse> = emptyMap(),
     ): Module {
         val memory = initialMemory.toMutableMap()
-        override fun process(input: Message): Pulse? {
+        override fun process(input: Message): Pulse {
             memory[input.source] = input.value
             return if (memory.values.all { it == Pulse.HIGH }) Pulse.LOW else Pulse.HIGH
         }
         override fun copy(): Conjunction = Conjunction(name, destinations.toList(), memory)
     }
 
-    data class Broadcast(
-        override val name: String,
-        override val destinations: List<String>
-    ): Module {
-        override fun process(input: Message): Pulse? {
-            return if (input.value == Pulse.LOW) Pulse.LOW else Pulse.HIGH
-        }
+    data class Broadcast(override val name: String, override val destinations: List<String>): Module {
+        override fun process(input: Message): Pulse = if (input.value == Pulse.LOW) Pulse.LOW else Pulse.HIGH
         override fun copy(): Broadcast = Broadcast(name, destinations.toList())
     }
 
@@ -71,20 +59,18 @@ class Day20 : Day(20) {
     }
 
     init {
-        modules.forEach { (name, module) ->
-            if (module is Conjunction) {
-                val sources = modules.filterValues { name in it.destinations }
-                sources.forEach { (srcName, _) ->
-                    module.memory[srcName] = Pulse.LOW
-                }
+        modules.values.filterIsInstance<Conjunction>().forEach { module ->
+            modules.filterValues { module.name in it.destinations }.forEach { (srcName, _) ->
+                module.memory[srcName] = Pulse.LOW
             }
         }
     }
 
     data class Message(val source: String, val destination: String, val value: Pulse)
+    data class State(val index: Long, val modules: Map<String,Module>, val messages: List<Pair<Long,Message>>)
 
-    private fun pressButton(input: Map<String,Module>): Pair<Map<String,Module>,List<Message>> {
-        val modules = input.mapValues { (_, v) -> v.copy() }.toMap()
+    private fun pressButton(input: State): State {
+        val modules = input.modules.mapValues { (_, v) -> v.copy() }.toMap()
         val queue = mutableListOf(Message("button", "broadcaster", Pulse.LOW))
         val processed = mutableListOf<Message>()
 
@@ -102,34 +88,27 @@ class Day20 : Day(20) {
             }
         }
 
-        return modules to processed
+        return State(input.index + 1, modules, input.messages + processed.map { input.index + 1 to it })
     }
 
-    override fun part1() : Any {
-        val (_, result) = (1..1000).fold(modules to (0L to 0L)) { (current, sum), _ ->
-            val (next, messages) = pressButton(current)
-            val (high, low) = messages.partition { it.value == Pulse.HIGH }
-            next to (sum + (high.count() to low.count()))
-        }
+    private val initial = State(0, modules, emptyList())
 
-        return result.first * result.second
-    }
+    override fun part1() : Any = (1..1000).fold(initial) { acc, _ -> pressButton(acc)}
+            .messages
+            .map { it.second }
+            .partition { it.value == Pulse.HIGH }
+            .let { (high, low) -> high.count() * low.count() }
 
     override fun part2() : Any {
         val rxParent = modules.values.first { "rx" in it.destinations }.name
-        val rxGrandparents: List<String> = modules.values.filter { rxParent in it.destinations }.map { it.name }
+        val rxGrandparents = modules.values.filter { rxParent in it.destinations }.map { it.name }
 
-        data class State(val index: Long, val modules: Map<String,Module>, val messages: List<Pair<Long,Message>>)
-
-        val initial = State(1, modules, emptyList())
-        val (_, _, cycles) = generateSequence(initial) { (index, state, messages) ->
-            val (next, msgs) = pressButton(state)
-            val targetMessages = msgs.filter { it.destination == rxParent && it.value == Pulse.HIGH }.map { index to it }
-
-            State(index + 1, next, messages + targetMessages)
-        }.first { (_, _, msgs) -> rxGrandparents.all { it in msgs.map { it.second.source } } }
-
-        return rxGrandparents.map { gp -> cycles.first { it.second.source == gp }.first }
-            .reduce { acc, l -> acc.lcm(l)}
+        return generateSequence(initial) { state ->
+            pressButton(state).let { (a, b, c) ->
+                State(a, b, c.filter { it.second.destination == rxParent && it.second.value == Pulse.HIGH })
+            }
+        }.map(State::messages)
+        .first { messages -> rxGrandparents.all { gp -> gp in messages.map { it.second.source }} }
+        .fold(1L) { acc, (index, _) -> acc.lcm(index)}
     }
 }
