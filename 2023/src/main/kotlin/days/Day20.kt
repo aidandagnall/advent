@@ -8,7 +8,7 @@ class Day20 : Day(20) {
     sealed interface Module {
         val name: String
         val destinations: List<String>
-        fun process(inputs: List<Message>): Pulse?;
+        fun process(input: Message): Pulse?;
         fun copy(): Module;
     }
     data class FlipFlop(
@@ -17,13 +17,21 @@ class Day20 : Day(20) {
         val initialState: Boolean = false,
     ): Module {
         private var on: Boolean = initialState
-        override fun process(inputs: List<Message>): Pulse? {
-            return if (inputs.any { it.value == Pulse.LOW } && inputs.isNotEmpty()) {
-                on = !on
-                if (on) Pulse.HIGH else Pulse.LOW
-            } else {
-                null
+        override fun process(input: Message): Pulse? {
+            return when (input.value) {
+                Pulse.LOW -> {
+                    on = !on
+                    if (on) Pulse.HIGH else Pulse.LOW
+                }
+                else -> null
             }
+//            if (input.value == Pulse.)
+//            return if (inputs.any { it.value == Pulse.LOW } && inputs.isNotEmpty()) {
+//                on = !on
+//                if (on) Pulse.HIGH else Pulse.LOW
+//            } else {
+//                null
+//            }
         }
         override fun copy(): FlipFlop = FlipFlop(name, destinations.toList(), on)
     }
@@ -34,10 +42,8 @@ class Day20 : Day(20) {
         val initialMemory: Map<String,Pulse> = emptyMap(),
     ): Module {
         val memory = initialMemory.toMutableMap()
-        override fun process(inputs: List<Message>): Pulse? {
-            inputs.forEach { (src, _, value) ->
-                memory[src] = value
-            }
+        override fun process(input: Message): Pulse? {
+            memory[input.source] = input.value
             return if (memory.values.all { it == Pulse.HIGH }) Pulse.LOW else Pulse.HIGH
         }
         override fun copy(): Conjunction = Conjunction(name, destinations.toList(), memory)
@@ -47,22 +53,21 @@ class Day20 : Day(20) {
         override val name: String,
         override val destinations: List<String>
     ): Module {
-        override fun process(inputs: List<Message>): Pulse? {
-            return if (inputs.first().value == Pulse.LOW) Pulse.LOW else Pulse.HIGH
+        override fun process(input: Message): Pulse? {
+            return if (input.value == Pulse.LOW) Pulse.LOW else Pulse.HIGH
         }
         override fun copy(): Broadcast = Broadcast(name, destinations.toList())
     }
 
-    val modules = inputList.associate {
-        val name = it.removePrefix("%").removePrefix("&").takeWhile { it != ' ' }
-        val destinations = it.split("->").last().trim().split(", ")
-        val module = when(it.first()) {
-            '%' -> FlipFlop(name, destinations)
-            '&' -> Conjunction(name, destinations)
+    private val modules = inputList.associate {
+        val (name, destinations) = it.split(" -> ").let { (n, d) -> n to d.trim().split(", ") }
+        val module = when(name.first()) {
+            '%' -> FlipFlop(name.drop(1), destinations)
+            '&' -> Conjunction(name.drop(1), destinations)
             'b' -> Broadcast(name, destinations)
             else -> error("Unsupported module")
         }
-        name to module
+        module.name to module
     }
 
     init {
@@ -80,55 +85,20 @@ class Day20 : Day(20) {
 
     private fun pressButton(input: Map<String,Module>): Pair<Map<String,Module>,List<Message>> {
         val modules = input.mapValues { (_, v) -> v.copy() }.toMap()
-        val queue = mutableListOf(
-            Message("button", "broadcaster", Pulse.LOW)
-        )
-
-        val messages = mutableMapOf(
-            "broadcaster" to mutableListOf(Message("button", "broadcaster", Pulse.LOW))
-        )
-
+        val queue = mutableListOf(Message("button", "broadcaster", Pulse.LOW))
         val processed = mutableListOf<Message>()
 
         while(queue.isNotEmpty()) {
             val next = queue.removeFirst()
             val module = modules[next.destination] ?: continue
 
-            val output = if (module is Conjunction) {
-                val t = module.process(messages[module.name]!!.take(1))
-                val m = messages[module.name]!!.removeFirst()
-                processed.add(m)
+            processed.add(next)
+            val output = module.process(next) ?: continue
 
-                t
-            } else {
-                queue.removeAll { it.destination == next.destination }
-                val t = module.process(messages[module.name] ?: emptyList())
-
-                messages[module.name]?.let {
-                    processed.addAll(it)
-                    it.clear()
-                }
-
-                t
-            }
-
-            if (output != null) {
-                module.destinations.forEach {
-                    val message = Message(module.name, it, output)
-                    if (it in modules) {
-                        queue.add(message)
-                    }
-
-                    if (it in modules) {
-                        if (it in messages) {
-                            messages[it]!!.add(message)
-                        } else {
-                            messages[it] = mutableListOf(message)
-                        }
-                    } else {
-                        processed.add(message)
-                    }
-                }
+            module.destinations.forEach {
+                val message = Message(module.name, it, output)
+                if (it in modules) queue.add(message)
+                else processed.add(message)
             }
         }
 
@@ -138,7 +108,8 @@ class Day20 : Day(20) {
     override fun part1() : Any {
         val (_, result) = (1..1000).fold(modules to (0L to 0L)) { (current, sum), _ ->
             val (next, messages) = pressButton(current)
-            next to (sum + (messages.count { it.value == Pulse.HIGH }.toLong() to messages.count { it.value == Pulse.LOW }.toLong()))
+            val (high, low) = messages.partition { it.value == Pulse.HIGH }
+            next to (sum + (high.count() to low.count()))
         }
 
         return result.first * result.second
