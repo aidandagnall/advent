@@ -14,6 +14,6 @@ class Day20Test {
 
     @Test
     fun testPartTwo() {
-        assertEquals(0, day.part2())
+        // no part 2 test today!
     }
 }
