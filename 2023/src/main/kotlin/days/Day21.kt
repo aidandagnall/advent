@@ -1,44 +1,44 @@
 package days
 
-import util.manhattan
+import util.neighbours4
 
 class Day21 : Day(21) {
 
-    val map = inputList.flatMapIndexed { y, line ->
+    private val map = inputList.flatMapIndexed { y, line ->
         line.mapIndexed { x, c ->
             (x to y) to c
         }
     }.toMap()
 
-    val start = map.filterValues { it == 'S' }.keys.first()
+    private val start = map.filterValues { it == 'S' }.keys.first()
 
-    val minX = map.keys.minOf { it.first }
-    val maxX = map.keys.maxOf { it.first }
-    val minY = map.keys.minOf { it.second }
-    val maxY = map.keys.maxOf { it.second }
+    private val maxX = map.keys.maxOf { it.first }
+    private val maxY = map.keys.maxOf { it.second }
 
-    val steps = mutableSetOf<Pair<Int,Int>>()
     override fun part1() : Any {
         return step(start, 64)
     }
 
     private fun step(start: Pair<Int,Int>, count: Int): Int {
         val steps = setOf<Pair<Int,Int>>(start)
-        return (1..64).fold(steps) { acc, i ->
-            acc.flatMap { it.neighbours().filter { it in map && map[it] != '#' } }.toSet()
+        return (1..count).fold(steps) { acc, i ->
+            acc.flatMap { it.neighbours4().filter { (x, y) ->
+                val adj = Math.floorMod(x, maxX + 1) to Math.floorMod(y, maxY + 1)
+                adj in map && map[adj] != '#' }
+            }.toSet()
         }.count()
     }
 
-    private fun Pair<Int,Int>.neighbours(): List<Pair<Int,Int>> {
-        return listOf(
-            this.first + 1 to this.second,
-            this.first - 1 to this.second,
-            this.first to this.second + 1,
-            this.first to this.second - 1,
-        )
-    }
-
+    // a popular method from r/adventofcode
+    // this is far too smart for me to find by myself
     override fun part2() : Any {
-        return 0
+        val (a0, a1, a2) = (0..2).map { step(start, 65 + 131 * it) }
+
+        val n = 26501365L / (maxX + 1).toLong()
+        val b0 = a0.toLong()
+        val b1 = (a1 - a0).toLong()
+        val b2 = (a2 - a1).toLong()
+
+        return b0 + (b1 * n) + (((n * (n - 1L)) / 2L) * (b2 - b1))
     }
 }
