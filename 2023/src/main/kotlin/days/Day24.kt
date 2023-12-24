@@ -5,12 +5,14 @@ class Day24 : Day(24) {
     data class Vector(val x: Double, val y: Double, val z: Double)
     data class Hailstone(val position: Vector, val velocity: Vector)
 
-    val hailstones = inputList.map { line ->
+    private val hailstones = inputList.map { line ->
         val (pos, vel) = line.split(" @ ")
         val position = pos.split(", ").map { it.toDouble() }.let { (x, y, z) ->Vector(x, y, z) }
         val velocity= vel.split(", ").map { it.toDouble() }.let { (x, y, z) ->Vector(x, y, z) }
         Hailstone(position, velocity)
     }
+
+    private val testRange = 200000000000000..400000000000000
 
     fun lineIntersect(h1: Hailstone, h2: Hailstone): Vector? {
         val (x1, y1, _) = h1.position
@@ -30,13 +32,10 @@ class Day24 : Day(24) {
         }
 
         val ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom
-        val ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom
 
         return Vector(x1 + ua * (x2 - x1), y = y1 + ua * (y2 - y1), 0.0)
     }
 
-    val testRange = 200000000000000..400000000000000
-//    val testRange = 7..27
 
     override fun part1() : Any {
         val collisions = mutableSetOf<Pair<Hailstone,Hailstone>>()
@@ -66,12 +65,21 @@ class Day24 : Day(24) {
     }
 
     override fun part2() : Any {
-        return hailstones.take(3).flatMapIndexed { i, it ->
+        val formula = hailstones.take(3).flatMapIndexed { i, it ->
             listOf(
-                "t$i * rvx + rpx = t$i * ${it.velocity.x} + ${it.position.x}",
-                "t$i * rvy + rpy = t$i * ${it.velocity.y} + ${it.position.y}",
-                "t$i * rvz + rpz = t$i * ${it.velocity.z} + ${it.position.z}",
+                "t$i * rvx + rpx == t$i * ${it.velocity.x.toLong()} + ${it.position.x.toLong()}",
+                "t$i * rvy + rpy == t$i * ${it.velocity.y.toLong()} + ${it.position.y.toLong()}",
+                "t$i * rvz + rpz == t$i * ${it.velocity.z.toLong()} + ${it.position.z.toLong()}",
+                "t$i >= 0"
             )
-        }.joinToString("\n")
+        }.joinToString(prefix="Solve[{", separator = ",", postfix = "}, { rpx, rpy, rpz, rvx, rvy, rvz }, Integers ]")
+
+        // print out a formula to input into Mathematica
+        println(formula)
+
+        // outputs for (x, y, z) position
+        val t = listOf(172543224455736, 348373777394510,148125938782131)
+
+        return t.sum()
     }
 }
