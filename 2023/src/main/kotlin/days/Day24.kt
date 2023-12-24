@@ -66,6 +66,12 @@ class Day24 : Day(24) {
     }
 
     override fun part2() : Any {
-        return 0
+        return hailstones.take(3).flatMapIndexed { i, it ->
+            listOf(
+                "t$i * rvx + rpx = t$i * ${it.velocity.x} + ${it.position.x}",
+                "t$i * rvy + rpy = t$i * ${it.velocity.y} + ${it.position.y}",
+                "t$i * rvz + rpz = t$i * ${it.velocity.z} + ${it.position.z}",
+            )
+        }.joinToString("\n")
     }
 }
