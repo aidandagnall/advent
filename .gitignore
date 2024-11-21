@@ -1,10 +1,16 @@
 *.txt
 !**/day00.txt
 !**/test/**/*.txt
+
 .vscode/
+
 **/.idea/*
+!**/.idea/runConfigurations/
+!**/.idea/runConfigurations/*
+
 **/.gradle/*
 **/build/*
 **/bin/*
 *.exe
+
 **/.DS_Store
