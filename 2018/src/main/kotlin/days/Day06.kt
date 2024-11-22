@@ -9,7 +9,6 @@ class Day06 : Day(6) {
         }
     }
 
-
     override fun part1() : Any {
         return coords.mapNotNull { coord ->
             inputs.minByWithDuplicates { coord.manhattanDistanceTo(it) }.let { if (it.size == 1) it[0] else null }
