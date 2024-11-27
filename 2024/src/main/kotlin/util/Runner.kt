@@ -1,42 +1,41 @@
 package util
 import days.Day
-import org.reflections.Reflections
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
 import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
-object Runner {
-
-    private val reflections = Reflections("days")
-
+object RunDay {
     @JvmStatic
-    fun main(args : Array<String>) {
-        val solve = if ("-t" in args) Class<out Day>::runTimed else Class<out Day>::run
-        val days = reflections.getSubTypesOf(Day::class.java)
-
-        when {
-            "-m" in args -> days.sortedBy { it.simpleName.replace("Day", "").toInt() }
-                                .filter { it.simpleName.replace("Day", "").toInt() != 0 }
-                                .forEach { solve(it) }
-
-            "-l" in args -> solve(days.maxByOrNull { it.simpleName.replace("Day", "").toInt() }!!)
-            else ->  days.find { it.simpleName.replace("Day", "").toInt() == args[0].toInt() }
-                                ?.let { solve(it) }
-        }
-    }
+    fun main(args: Array<String>) =
+        Day::class.sealedSubclasses
+            .find { it.getNumber() == args[0].toInt() }
+                ?.run() ?: error("No class found for Day ${args[0]}")
 }
 
-@OptIn(ExperimentalTime::class)
-private fun Class<out Day>.runTimed() {
-    val (_, total) = measureTimedValue {
-        val (day, time) = measureTimedValue { constructors[0].newInstance() as Day }
-        println("Day: ${day.day}")
-        println("\tInit: ${time.toString(DurationUnit.SECONDS, 4)}")
-        (Day::solveTimed)((constructors[0].newInstance() as Day))
-    }
+object RunMonth {
+    @JvmStatic
+    fun main(args: Array<String>) =
+        Day::class.sealedSubclasses
+            .sortedBy { it.getNumber() }
+            .forEach { it.run() }
+}
+
+object RunLatest {
+    @JvmStatic
+    fun main(args: Array<String>) =
+        Day::class.sealedSubclasses
+            .maxBy { it.getNumber() }
+            .run()
+}
+
+private fun KClass<out Day>.run() {
+    val (day, initTime) = measureTimedValue { primaryConstructor?.call() ?: error("Primary constructor not present in day") }
+    println("Day: ${day.number}")
+    println("\tInit: ${initTime.toString(DurationUnit.SECONDS, 4)}")
+    val solveTime = day.solveTimed()
     println()
-    println("\tTotal: ${total.toString(DurationUnit.SECONDS, 4)}")
+    println("\tTotal: ${(initTime + solveTime).toString(DurationUnit.SECONDS, 4)}")
 }
-private fun Class<out Day>.run() {
-    (Day::solve)((constructors[0].newInstance() as Day))
-}
+
+private fun KClass<out Day>.getNumber() = simpleName?.replace("Day", "")?.toInt() ?: error("Class has no name")

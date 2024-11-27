@@ -5,8 +5,6 @@
 .vscode/
 
 **/.idea/*
-!**/.idea/runConfigurations/
-!**/.idea/runConfigurations/*
 
 **/.gradle/*
 **/build/*
