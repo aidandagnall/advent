@@ -82,7 +82,7 @@ class Day$dayString : Day($dayNumber) {
             """
 package days
 
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day${dayString}Test {
