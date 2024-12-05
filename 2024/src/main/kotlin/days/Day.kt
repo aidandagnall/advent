@@ -7,6 +7,16 @@ import kotlin.time.measureTimedValue
 
 sealed class Day(val number: Int) {
     protected val inputList: List<String> by lazy { InputReader.getInputAsList(number) }
+    protected val inputGroupedList: List<List<String>> by lazy {
+        var input = inputList
+        val output = mutableListOf<List<String>>()
+        while (input.isNotEmpty()) {
+            val group = input.takeWhile { it != "" }
+            output.add(group)
+            input = input.drop(group.size + 1)
+        }
+        output.toList()
+    }
 
     fun solveTimed(): Duration {
         val (part1, timeP1) = measureTimedValue { part1() }
