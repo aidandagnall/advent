@@ -25,6 +25,9 @@ class Day07 : Day(7) {
         if (others.size == 1) {
             return others[0] == result
         }
+        if (others.first() >= result) {
+            return false
+        }
 
         return operators.any {
             solve(result, listOf(it(others[0], others[1])) + others.drop(2), operators)
