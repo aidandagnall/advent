@@ -24,3 +24,13 @@ fun <T> List<T>.repeat(n: Int): List<T> = (1..< n).fold(this) { acc, _ ->
 }
 
 fun List<String>.filterNotEmpty(): List<String> = this.filter { it.isNotEmpty() }
+
+fun List<String>.getPoints() = List(size) { y ->
+    List(first().count()) { x ->
+        x to y
+    }
+}.flatten()
+
+fun <T> List<T>.getAllPairs() = flatMap { a ->
+    mapNotNull { b -> if (a == b) null else a to b}
+}
