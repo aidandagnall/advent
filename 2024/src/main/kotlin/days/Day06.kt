@@ -1,5 +1,6 @@
 package days
 
+import util.Direction
 import util.plus
 
 class Day06 : Day(6) {
@@ -16,22 +17,14 @@ class Day06 : Day(6) {
         s.mapIndexed { x, c ->
             if (c == '^') x to y else null
         }.filterNotNull()
-    }.first().let { Guard(it, 0 to -1) }
+    }.first().let { Guard(it, Direction.NORTH) }
 
-    data class Guard(val position: Pair<Int,Int>, val direction: Pair<Int,Int>) {
+    data class Guard(val position: Pair<Int,Int>, val direction: Direction) {
         fun move(walls: Set<Pair<Int,Int>>): Guard {
             if (position + direction in walls) {
-                return copy(direction = direction.turn())
+                return copy(direction = direction.turnRight())
             }
             return copy(position = position + direction)
-        }
-
-      private fun Pair<Int,Int>.turn(): Pair<Int,Int> = when(this) {
-            0 to -1 -> 1 to 0
-            1 to 0 -> 0 to 1
-            0 to 1 -> -1 to 0
-            -1 to 0 -> 0 to -1
-            else -> error("")
         }
     }
 
