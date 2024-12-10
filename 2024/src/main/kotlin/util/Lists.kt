@@ -31,6 +31,13 @@ fun List<String>.getPoints() = List(size) { y ->
     }
 }.flatten()
 
+fun <T> List<String>.parseGrid(f: (Pair<Int,Int>, Char) -> T?): List<T> =
+    flatMapIndexed { y, line ->
+        line.mapIndexed { x, c ->
+            f(x to y, c)
+        }
+    }.filterNotNull()
+
 fun <T> List<T>.getAllPairs() = flatMap { a ->
     mapNotNull { b -> if (a == b) null else a to b}
 }
