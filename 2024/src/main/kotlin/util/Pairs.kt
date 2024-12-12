@@ -21,6 +21,10 @@ operator fun Pair<Int,Int>.plus(other: Direction): Pair<Int,Int> {
     return this + other.toVector()
 }
 
+operator fun Pair<Double,Double>.plus(other: Pair<Double,Double>): Pair<Double,Double> {
+    return (this.first + other.first) to (this.second + other.second)
+}
+
 enum class Direction {
     NORTH,
     NORTHEAST,
@@ -51,7 +55,18 @@ enum class Direction {
         WEST -> NORTH
         NORTHWEST -> NORTHEAST
     }
+    fun turnLeft() = when(this) {
+        NORTH -> WEST
+        NORTHEAST -> NORTHWEST
+        EAST -> NORTH
+        SOUTHEAST -> NORTHEAST
+        SOUTH -> EAST
+        SOUTHWEST -> SOUTHEAST
+        WEST -> SOUTH
+        NORTHWEST -> SOUTHWEST
+    }
 }
+fun Pair<Int,Int>.toDirection(): Direction = Direction.values().first { it.toVector() == this }
 
 fun Pair<Int,Int>.manhattan(other: Pair<Int,Int>): Int {
     return abs(this.first - other.first) + abs(this.second - other.second)
@@ -69,7 +84,7 @@ fun Pair<Int,Int>.neighbours8(): List<Pair<Int,Int>> =
         (-1..1).map { y ->
             first + x to second + y
         }
-    }.filter { it == this }
+    }.filterNot { it == this }
 
 operator fun Pair<Int,Int>.times(scalar: Int) = first * scalar to second * scalar
 
