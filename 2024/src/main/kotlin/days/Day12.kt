@@ -4,7 +4,7 @@ import util.*
 
 class Day12 : Day(12) {
     private val points = inputList.parseGrid { pos, c -> pos to c }.toMap()
-    private val groups: List<Set<Pair<Int,Int>>> = buildList {
+    private val groups: List<Set<Point>> = buildList {
         points.forEach { (point, plant) ->
             if (this.any { point in it }) return@forEach
 
@@ -21,14 +21,14 @@ class Day12 : Day(12) {
         }
     }
 
-    override fun part1(): Any = groups.sumOf { it.perimeter() * it.area() }
-    override fun part2(): Any = groups.sumOf { it.numSides() * it.area() }
+    override fun part1(): Int = groups.sumOf { it.perimeter() * it.area() }
+    override fun part2(): Int = groups.sumOf { it.numSides() * it.area() }
 
     private fun Set<Point>.area(): Int = count()
     private fun Set<Point>.perimeter(): Int = sumOf { a -> a.neighbours4().count { it !in this } }
     private fun Set<Point>.numSides() = scale(3).edges().corners().count()
 
-    private fun Set<Pair<Int,Int>>.isCorner(point: Pair<Int,Int>): Boolean =
+    private fun Set<Point>.isCorner(point: Point): Boolean =
         listOf(Direction.NORTH to Direction.SOUTH, Direction.EAST to Direction.WEST).none { (a, b) ->
             (point + a) in this && (point + b) in this
         }
