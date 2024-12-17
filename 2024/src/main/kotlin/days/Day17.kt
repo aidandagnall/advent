@@ -6,43 +6,38 @@ class Day17 : Day(17) {
     private val registers = inputList.take(3).map { it.substringAfter(": ").toLong() }
     private val instructions = inputList.drop(4).first().substringAfter(": ").split(",").map { it.toInt() }
 
-    override fun part1() : Any = run(registers[0], registers[1], registers[2]).joinToString(",")
+    private val initialState = State(registers[0], registers[1], registers[2], ins = instructions)
+
+    override fun part1() : Any = initialState.run2().out.joinToString(",")
     override fun part2(): Any = search("", emptyList()) ?: 0
 
-    fun run(initA: Long, initB: Long, initC: Long, ins: List<Int> = instructions): List<Int> {
-        var pointer = -2
-        var a = initA
-        var b = initB
-        var c = initC
-
-        val out = mutableListOf<Long>()
-        while(true) {
-            pointer += 2
-            if (pointer !in ins.indices) break
-
-            val literalOperand = ins[pointer + 1].toLong()
-            val comboOperand = when (ins.getOrNull(pointer + 1)) {
-                    in 0..3 -> ins[pointer + 1].toLong()
-                    4 -> a
-                    5 -> b
-                    6 -> c
-                    else -> error("")
-                }
-
-            when (ins.getOrNull(pointer)) {
-                0 -> a = (a / 2.0.pow(comboOperand.toInt())).toLong()
-                1 -> b = b xor literalOperand
-                2 -> b = comboOperand % 8
-                3 -> if (a != 0L) pointer = literalOperand.toInt() - 2
-                4 -> b = b xor c
-                5 -> out.add(comboOperand % 8)
-                6 -> b = (a / 2.0.pow(comboOperand.toInt())).toLong()
-                7 -> c = (a / 2.0.pow(comboOperand.toInt())).toLong()
+    data class State(val a: Long, val b: Long, val c: Long, val ins: List<Int>, val out: List<Int> = emptyList(), val pointer: Int = 0) {
+        val opcode = ins.getOrNull(pointer)
+        val literalOperand by lazy { ins[pointer + 1] }
+        val comboOperand by lazy {
+            when (ins.getOrNull(pointer + 1)) {
+                in 0..3 -> ins[pointer + 1].toLong()
+                4 -> a
+                5 -> b
+                6 -> c
                 else -> error("")
             }
         }
+    }
 
-        return out.map { it.toInt() }
+    private tailrec fun State.run2(): State {
+        return when(opcode) {
+            0 -> copy(a = a / 2.0.pow(comboOperand.toInt()).toLong(), pointer = pointer + 2)
+            1 -> copy(b = b xor literalOperand.toLong(), pointer = pointer + 2)
+            2 -> copy(b = comboOperand % 8, pointer = pointer + 2)
+            3 -> if (a == 0L) copy(pointer = pointer + 2) else copy(pointer = literalOperand)
+            4 -> copy(b = b xor c, pointer = pointer + 2)
+            5 -> copy(out = out + (comboOperand % 8).toInt(), pointer = pointer + 2)
+            6 -> copy(b = a / 2.0.pow(comboOperand.toInt()).toLong(), pointer = pointer + 2)
+            7 -> copy(c = a / 2.0.pow(comboOperand.toInt()).toLong(), pointer = pointer + 2)
+            null -> return this
+            else -> error("")
+        }.run2()
     }
 
     private fun search(a: String, result: List<Int>): Long? {
@@ -50,7 +45,7 @@ class Day17 : Day(17) {
         if (a.length > (result.size + 3) * 3) return null                    // rough heuristic to prevent stack overflow for starting with 0
         if (result != instructions.takeLast(result.size)) return null
         return (0..7).map { a + it.toString(2).padStart(3, '0') }
-            .map { it to run(it.toLong(2), 0, 0) }
-            .firstNotNullOfOrNull { (i, res) -> search(i, res) }
+            .map { it to initialState.copy(a = it.toLong(2)).run2() }
+            .firstNotNullOfOrNull { (i, res) -> search(i, res.out) }
     }
 }
