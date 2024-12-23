@@ -1,12 +1,13 @@
 package days
 
+
 class Day23 : Day(23) {
 
-    private val connections = buildMap<String, List<String>> {
+    private val connections = buildMap<String, Set<String>> {
         inputList.forEach {
             val (a, b) = it.split("-")
-            this[a] = this.getOrDefault(a, emptyList()) + b
-            this[b] = this.getOrDefault(b, emptyList()) + a
+            this[a] = this.getOrDefault(a, emptySet()) + b
+            this[b] = this.getOrDefault(b, emptySet()) + a
         }
     }
 
@@ -20,23 +21,32 @@ class Day23 : Day(23) {
             }
         }.toSet().count { it.any { it.first() == 't' } }
 
-    val cache = mutableMapOf<Pair<String, Set<String>>, List<String>>()
-
-    private fun traverseGraph(start: String, set: Set<String>): List<String> {
-        if (start to set in cache) return cache[start to set]!!
-        return (connections[start]!!
-            .filter { set.all { start in connections[it]!! } && it !in set }
-            .map { traverseGraph(it, set + start) }
-            .maxByOrNull { it.size }?.toList() ?: set.toList())
-            .also { cache[start to set] = it }
-    }
-
-    override fun part2() : Any {
-        return connections.map { (k, _) ->
-            println(k)
-            traverseGraph(k, emptySet()) }
+    override fun part2() : Any =
+        bronKerbosch(connections.keys,emptySet(), emptySet())
             .maxBy { it.size }
             .sorted()
             .joinToString(",")
+
+    // I had to google what this is
+    private fun bronKerbosch(nodes: Set<String>, clique: Set<String>, alreadyRemoved: Set<String>): Set<Set<String>> {
+        val cliques: MutableSet<Set<String>> = HashSet()
+        val candidates = nodes.toMutableList()
+        val removed = alreadyRemoved.toMutableList()
+
+        if (candidates.isEmpty() && removed.isEmpty()) cliques.add(HashSet(clique))
+
+        while (candidates.isNotEmpty()) {
+            val current = candidates.first()
+            cliques.addAll(
+                bronKerbosch(
+                    candidates.filter { it in connections[current]!! }.toSet(),
+                    clique + current,
+                    removed.filter { it in connections[current]!! }.toSet()
+                )
+            )
+            candidates.remove(current)
+            removed.add(current)
+        }
+        return cliques
     }
 }
