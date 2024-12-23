@@ -25,6 +25,10 @@ operator fun Pair<Double,Double>.plus(other: Pair<Double,Double>): Pair<Double,D
     return (this.first + other.first) to (this.second + other.second)
 }
 
+operator fun Pair<Int, Int>.minus(other: Pair<Int, Int>): Pair<Int,Int> {
+    return (this.first - other.first) to (this.second - other.second)
+}
+
 enum class Direction {
     NORTH,
     NORTHEAST,
