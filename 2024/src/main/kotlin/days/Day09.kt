@@ -17,7 +17,6 @@ class Day09 : Day(9) {
         this[dest] = file.copy(moved = true)
         this.add(dest + 1, Space(space.count - file.count))
         this[src + 1] = Space(file.count)
-        this.removeLast()
         this.removeAll { it.count <= 0}
     }
 

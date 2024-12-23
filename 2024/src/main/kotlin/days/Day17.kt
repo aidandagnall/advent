@@ -8,7 +8,7 @@ class Day17 : Day(17) {
 
     private val initialState = State(registers[0], registers[1], registers[2], ins = instructions)
 
-    override fun part1() : Any = initialState.run2().out.joinToString(",")
+    override fun part1() : Any = initialState.run().out.joinToString(",")
     override fun part2(): Any = search("", emptyList()) ?: 0
 
     data class State(val a: Long, val b: Long, val c: Long, val ins: List<Int>, val out: List<Int> = emptyList(), val pointer: Int = 0) {
@@ -25,7 +25,7 @@ class Day17 : Day(17) {
         }
     }
 
-    private tailrec fun State.run2(): State {
+    tailrec fun State.run(): State {
         return when(opcode) {
             0 -> copy(a = a / 2.0.pow(comboOperand.toInt()).toLong(), pointer = pointer + 2)
             1 -> copy(b = b xor literalOperand.toLong(), pointer = pointer + 2)
@@ -37,7 +37,7 @@ class Day17 : Day(17) {
             7 -> copy(c = a / 2.0.pow(comboOperand.toInt()).toLong(), pointer = pointer + 2)
             null -> return this
             else -> error("")
-        }.run2()
+        }.run()
     }
 
     private fun search(a: String, result: List<Int>): Long? {
@@ -45,7 +45,7 @@ class Day17 : Day(17) {
         if (a.length > (result.size + 3) * 3) return null                    // rough heuristic to prevent stack overflow for starting with 0
         if (result != instructions.takeLast(result.size)) return null
         return (0..7).map { a + it.toString(2).padStart(3, '0') }
-            .map { it to initialState.copy(a = it.toLong(2)).run2() }
+            .map { it to initialState.copy(a = it.toLong(2)).run() }
             .firstNotNullOfOrNull { (i, res) -> search(i, res.out) }
     }
 }
