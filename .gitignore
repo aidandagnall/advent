@@ -1,6 +1,7 @@
 *.txt
 !**/day00.txt
 !**/test/**/*.txt
+!**/inputs_test/*.txt
 
 .vscode/
 
