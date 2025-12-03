@@ -14,10 +14,10 @@ From 2025 onwards, Advent of Code is only 12 days. I still intend to write
 Kotlin and wake up early to do them live.
 
 | Day         | 2025                                          |
-| ----------- | --------------------------------------------- |
+|-------------|-----------------------------------------------|
 | 1           | [:star2:](2025/src/main/kotlin/days/Day01.kt) |
 | 2           | [:star2:](2025/src/main/kotlin/days/Day02.kt) |
-| 3           |                                               |
+| 3           | [:star2:](2025/src/main/kotlin/days/Day03.kt) |
 | 4           |                                               |
 | 5           |                                               |
 | 6           |                                               |
@@ -27,7 +27,7 @@ Kotlin and wake up early to do them live.
 | 10          |                                               |
 | 11          |                                               |
 | 12          |                                               |
-| Total Stars | 4                                             |
+| Total Stars | 6                                             |
 | Language    | Kotlin                                        |
 
 ## 2019 - 2024
@@ -35,7 +35,7 @@ Kotlin and wake up early to do them live.
 I did these years live as they came out
 
 | Day         | 2019                  | 2020                  | 2021                                          | 2022                                          | 2023                                          | 2024                                          |
-| ----------- | --------------------- | --------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
+|-------------|-----------------------|-----------------------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|-----------------------------------------------|
 | 1           | [:star2:](2019/Day01) | [:star2:](2020/Day01) | [:star2:](2021/src/main/kotlin/days/Day01.kt) | [:star2:](2022/src/main/kotlin/days/Day01.kt) | [:star2:](2023/src/main/kotlin/days/Day01.kt) | [:star2:](2024/src/main/kotlin/days/Day01.kt) |
 | 2           | [:star2:](2019/Day02) | [:star2:](2020/Day02) | [:star2:](2021/src/main/kotlin/days/Day02.kt) | [:star2:](2022/src/main/kotlin/days/Day02.kt) | [:star2:](2023/src/main/kotlin/days/Day02.kt) | [:star2:](2024/src/main/kotlin/days/Day02.kt) |
 | 3           | [:star2:](2019/Day03) | [:star2:](2020/Day03) | [:star2:](2021/src/main/kotlin/days/Day03.kt) | [:star2:](2022/src/main/kotlin/days/Day03.kt) | [:star2:](2023/src/main/kotlin/days/Day03.kt) | [:star2:](2024/src/main/kotlin/days/Day03.kt) |
@@ -70,7 +70,7 @@ These years I've started completing in my spare time to catch up. I usually try
 a different language for these.
 
 | Day         | 2016                                 | 2017                              | 2018                                          |
-| ----------- | ------------------------------------ | --------------------------------- | --------------------------------------------- |
+|-------------|--------------------------------------|-----------------------------------|-----------------------------------------------|
 | 1           | [:star2:](2016/src/days/day01.gleam) | [:star2:](2017/src/days/day01.rs) | [:star2:](2018/src/main/kotlin/days/Day01.kt) |
 | 2           |                                      | [:star2:](2017/src/days/day02.rs) | [:star2:](2018/src/main/kotlin/days/Day02.kt) |
 | 3           |                                      | [:star2:](2017/src/days/day03.rs) | [:star2:](2018/src/main/kotlin/days/Day03.kt) |
