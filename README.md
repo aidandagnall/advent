@@ -18,7 +18,7 @@ Kotlin and wake up early to do them live.
 | 1           | [:star2:](2025/src/main/kotlin/days/Day01.kt) |
 | 2           | [:star2:](2025/src/main/kotlin/days/Day02.kt) |
 | 3           | [:star2:](2025/src/main/kotlin/days/Day03.kt) |
-| 4           |                                               |
+| 4           | [:star2:](2025/src/main/kotlin/days/Day04.kt) |
 | 5           |                                               |
 | 6           |                                               |
 | 7           |                                               |
