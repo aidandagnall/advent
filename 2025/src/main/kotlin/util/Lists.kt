@@ -41,3 +41,16 @@ fun <T> List<String>.parseGrid(f: (Pair<Int,Int>, Char) -> T?): List<T> =
 fun <T> List<T>.getAllPairs() = flatMap { a ->
     mapNotNull { b -> if (a == b) null else a to b}
 }
+
+infix fun <T> T.inAny(collection : Collection<Collection<T>>) = collection.any { this in it }
+
+fun <T> List<T>.split(f: (T) -> Boolean): List<List<T>> {
+    var input = this
+    val output = mutableListOf<List<T>>()
+    while(input.isNotEmpty()) {
+        val group = input.takeWhile { !f(it) }
+        output.add(group)
+        input = input.drop(group.size + 1)
+    }
+    return output.toList()
+}
