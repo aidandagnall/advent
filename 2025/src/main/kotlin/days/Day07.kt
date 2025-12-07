@@ -29,7 +29,6 @@ class Day07 : Day(7) {
         var activeBeams = mapOf(start to 1L)
 
         while (activeBeams.minOf { it.key.second } < splitters.maxOf { it.second}) {
-            println("${activeBeams.maxOf { it.key.second } } / ${splitters.maxOf { it.second }}")
             val next = activeBeams.flatMap {
                 val down = it.key + (0 to 1)
                 if (down in splitters) {
