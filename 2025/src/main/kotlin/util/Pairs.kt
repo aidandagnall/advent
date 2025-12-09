@@ -17,10 +17,6 @@ operator fun Pair<Long,Long>.plus(other: Pair<Int,Int>): Pair<Long,Long> {
     return (this.first + other.first) to (this.second + other.second)
 }
 
-operator fun Pair<Int,Int>.plus(other: Direction): Pair<Int,Int> {
-    return this + other.toVector()
-}
-
 operator fun Pair<Double,Double>.plus(other: Pair<Double,Double>): Pair<Double,Double> {
     return (this.first + other.first) to (this.second + other.second)
 }
@@ -29,47 +25,6 @@ operator fun Pair<Int, Int>.minus(other: Pair<Int, Int>): Pair<Int,Int> {
     return (this.first - other.first) to (this.second - other.second)
 }
 
-enum class Direction {
-    NORTH,
-    NORTHEAST,
-    EAST,
-    SOUTHEAST,
-    SOUTH,
-    SOUTHWEST,
-    WEST,
-    NORTHWEST;
-
-    fun toVector() = when(this) {
-        NORTH -> 0 to -1
-        NORTHEAST -> 1 to -1
-        EAST -> 1 to 0
-        SOUTHEAST -> 1 to 1
-        SOUTH -> 0 to 1
-        SOUTHWEST -> -1 to 1
-        WEST -> -1 to 0
-        NORTHWEST -> -1 to -1
-    }
-    fun turnRight() = when(this) {
-        NORTH -> EAST
-        NORTHEAST -> SOUTHEAST
-        EAST -> SOUTH
-        SOUTHEAST -> SOUTHWEST
-        SOUTH -> WEST
-        SOUTHWEST -> NORTHWEST
-        WEST -> NORTH
-        NORTHWEST -> NORTHEAST
-    }
-    fun turnLeft() = when(this) {
-        NORTH -> WEST
-        NORTHEAST -> NORTHWEST
-        EAST -> NORTH
-        SOUTHEAST -> NORTHEAST
-        SOUTH -> EAST
-        SOUTHWEST -> SOUTHEAST
-        WEST -> SOUTH
-        NORTHWEST -> SOUTHWEST
-    }
-}
 fun Pair<Int,Int>.toDirection(): Direction = Direction.values().first { it.toVector() == this }
 
 fun Pair<Int,Int>.manhattan(other: Pair<Int,Int>): Int {

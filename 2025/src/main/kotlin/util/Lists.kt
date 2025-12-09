@@ -38,7 +38,7 @@ fun <T> List<String>.parseGrid(f: (Pair<Int,Int>, Char) -> T?): List<T> =
         }
     }.filterNotNull()
 
-fun <T> List<T>.getAllPairs() = flatMap { a ->
+fun <T> Collection<T>.getAllPairs() = flatMap { a ->
     mapNotNull { b -> if (a == b) null else a to b}
 }
 

@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.2.21"
     application
 }
 
@@ -110,3 +111,4 @@ class Day${dayString}Test {
     }
 }
 
+val compileKotlin: KotlinCompile by tasks
