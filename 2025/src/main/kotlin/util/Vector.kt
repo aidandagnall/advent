@@ -30,6 +30,10 @@ data class Vector(val x: Int, val y: Int) {
     fun slopeTo(other: Vector): Float? =
         if(x == other.x) null
         else (y.toFloat() - other.y.toFloat()) / (x.toFloat() - other.x.toFloat())
+
+    override fun toString(): String {
+        return "(x=$x, y=$y)"
+    }
 }
 
 data class Vector3(val x: Int, val y: Int, val z: Int) {
