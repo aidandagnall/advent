@@ -24,7 +24,7 @@ class Day05 : Day(5) {
                 }
             }
         }
-        return (adjustedRanges + this.filterNot { r -> adjustedRanges.any { r.first in it && r.last in it } })
-            .let { if (it == this) this else it.toList().simplify() }
+        return (adjustedRanges + this.filterNot { r -> adjustedRanges.any { r.first in it && r.last in it } }).toList()
+            .let { if (it == this) this else it.simplify() }
     }
 }
