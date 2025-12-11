@@ -8,12 +8,12 @@ class Day08Test {
 
     @Test
     fun testPartOne() {
-        assertEquals(0, day.part1())
+        assertEquals(19, day.part1())
     }
 
 
     @Test
     fun testPartTwo() {
-        assertEquals(0, day.part2())
+        assertEquals(25272L, day.part2())
     }
 }
