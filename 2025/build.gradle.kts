@@ -21,6 +21,7 @@ dependencies {
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
     implementation(kotlin("stdlib-jdk8"))
+    implementation("tools.aqua:z3-turnkey:4.12.2")
 }
 
 application {
