@@ -24,10 +24,10 @@ Kotlin and wake up early to do them live.
 | 7           | [:star2:](2025/src/main/kotlin/days/Day07.kt) |
 | 8           | [:star2:](2025/src/main/kotlin/days/Day08.kt) |
 | 9           | [:star2:](2025/src/main/kotlin/days/Day09.kt) |
-| 10          |                                               |
-| 11          |                                               |
+| 10          | [:star2:](2025/src/main/kotlin/days/Day10.kt) |
+| 11          | [:star2:](2025/src/main/kotlin/days/Day11.kt) |
 | 12          |                                               |
-| Total Stars | 18                                            |
+| Total Stars | 22                                            |
 | Language    | Kotlin                                        |
 
 ## 2019 - 2024
