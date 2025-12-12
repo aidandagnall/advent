@@ -26,8 +26,8 @@ Kotlin and wake up early to do them live.
 | 9           | [:star2:](2025/src/main/kotlin/days/Day09.kt) |
 | 10          | [:star2:](2025/src/main/kotlin/days/Day10.kt) |
 | 11          | [:star2:](2025/src/main/kotlin/days/Day11.kt) |
-| 12          |                                               |
-| Total Stars | 22                                            |
+| 12          | [:star2:](2025/src/main/kotlin/days/Day12.kt) |
+| Total Stars | 24 :tada:                                     |
 | Language    | Kotlin                                        |
 
 ## 2019 - 2024
@@ -62,7 +62,7 @@ I did these years live as they came out
 | 24          |                       | [:star2:](2020/Day24) | [:star2:](2021/src/main/kotlin/days/Day24.kt) | [:star2:](2022/src/main/kotlin/days/Day24.kt) | [:star2:](2023/src/main/kotlin/days/Day24.kt) | [:star2:](2024/src/main/kotlin/days/Day24.kt) |
 | 25          |                       | [:star2:](2020/Day25) | [:star2:](2021/src/main/kotlin/days/Day25.kt) | [:star2:](2022/src/main/kotlin/days/Day25.kt) | [:star2:](2023/src/main/kotlin/days/Day25.kt) | [:star2:](2024/src/main/kotlin/days/Day25.kt) |
 | Total Stars | 19                    | 50 :tada:             | 50 :tada:                                     | 50 :tada:                                     | 50 :tada:                                     | 50 :tada:                                     |
-| Language    | C/C#                  | Python                | Kotlin                                        | Kotlin                                        | Kotlin                                        |                                               |
+| Language    | C/C#                  | Python                | Kotlin                                        | Kotlin                                        | Kotlin                                        | Kotlin                                        |
 
 ## 2015 - 2018
 
